@@ -2,28 +2,36 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
-  {
-    path: '/',
-    component: () => import('@/views/homePage.vue'),
-    children: [
       {
-        path: 'home',
-        name: 'home',
-        // route level code-splitting
-        // this generates a separate chunk (Home-[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () => import('@/views/homePage.vue'),
+        path: '/',
+        name: 'dashboard',
+        component: () => import('@/views/dashBoard.vue'),
       },
       {
-        path: 'login',
+        path: '/login',
         name: 'login',
-        // route level code-splitting
-        // this generates a separate chunk (Home-[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () => import('@/views/loginPage.vue'),
+        component: () => import('@/views/logIn.vue'),
       },
-    ],
-  },
+      {
+        path: '/candidates',
+        name: 'ccandidates',
+        component: () => import('@/views/candidatePage.vue'),
+      },
+      {
+        path: '/jobs',
+        name: 'jobs',
+        component: () => import('@/views/jobsPage.vue'),
+      },
+      {
+        path: '/users',
+        name: 'users',
+        component: () => import('@/views/userPage.vue'),
+      },
+      {
+        path: '/setting',
+        name: 'setting',
+        component: () => import('@/views/settingsPage.vue'),
+      },
 ]
 
 const router = createRouter({
