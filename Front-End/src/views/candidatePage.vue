@@ -114,6 +114,28 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
+          <!-- user information  -->
+        <v-dialog v-model="infoDialog" max-width="1000px">
+          <template v-slot:activator="{ props }">
+          </template>
+          <v-card>
+            <v-card-title>
+              <span class="text-h5">Item Information</span>
+            </v-card-title>
+            
+            <v-card-text>
+              <p>First Name: {{ clickedItem.firstName }}</p>
+              <p>Last Name: {{ clickedItem.lastName }}</p>
+              <!-- Display other item information here -->
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue-darken-1" variant="text" @click="infoDialog = false">
+                Close
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
         <v-dialog v-model="dialogDelete" max-width="500px">
           <v-card>
             <v-card-title class="text-h5"
@@ -140,10 +162,12 @@
       <v-chip :color="getStatusColor(item.status)" dark>{{ item.status }}</v-chip>
     </template>
     <template v-slot:item.actions="{ item }">
+      <v-icon @click=showItemInfo(item)> mdi-eye </v-icon>
       <v-icon size="small" class="me-2" @click="editItem(item)">
         mdi-pencil
       </v-icon>
       <v-icon size="small" @click="deleteItem(item)"> mdi-delete </v-icon>
+      
     </template>
     <template v-slot:no-data>
       <v-btn color="primary" @click="initialize"> Reset </v-btn>
@@ -155,6 +179,8 @@ export default {
   data: () => ({
     dialog: false,
     dialogDelete: false,
+    infoDialog: false,
+    clickedItem: null,
     headers: [
       {
         title: "First Name",
@@ -367,7 +393,11 @@ export default {
         default:
           return 'grey';
       }
-    }
+    },
+    showItemInfo(item) {
+     this.clickedItem = item;
+     this.infoDialog = true;
+   }
 
   },
 };
