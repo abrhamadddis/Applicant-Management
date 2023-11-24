@@ -1,7 +1,7 @@
 <template>
   <v-data-table
     :headers="headers"
-    :items="desserts"
+    :items="candidates"
     :sort-by="[{ key: 'calories', order: 'asc' }]"
   >
     <template v-slot:top>
@@ -54,10 +54,11 @@
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      v-model="editedItem.currentClient"
-                      label="Current Client"
-                    ></v-text-field>
+                   <v-select
+                   v-model=editedItem.currentClient
+                    :items=clients
+                   label = "Current Clien"
+                   ></v-select>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field
@@ -77,23 +78,26 @@
                       label="Upload Cv"
                     ></v-text-field>
                   </v-col>
+
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      v-model="editedItem.source"
-                      label="Source"
-                    ></v-text-field>
+                   <v-select
+                   v-model=editedItem.source
+                    :items=sources
+                   label = "Sources"
+                   ></v-select>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      v-model="editedItem.status"
-                      label="Status"
-                    ></v-text-field>
+                   <v-select
+                   v-model=editedItem.status
+                    :items=statuses
+                   label = "status"
+                   ></v-select>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field
+                  <v-col cols="12" sm="12" md="12">
+                    <v-textarea
                       v-model="editedItem.overAllFeedBack"
                       label="Over All Feedback"
-                    ></v-text-field>
+                    ></v-textarea>
                   </v-col>
                 </v-row>
               </v-container>
@@ -162,7 +166,7 @@ export default {
       { title: "Status", key: "status" },
       { title: "Actions", key: "actions", sortable: false },
     ],
-    desserts: [],
+    candidates: [],
     editedIndex: -1,
     editedItem: {
       firstName: "",
@@ -194,6 +198,24 @@ export default {
       status: "",
       overAllFeedBack: "",
     },
+    statuses:[
+      "Pending",
+      "Interviewed",
+      "Offered",
+      "Rejected"
+    ],
+    sources:[
+      "Linkedin",
+      "Telegram Bot",
+      "Tiktok",
+      "Dereja",
+      "University"
+    ],
+    clients: [
+      "CCI",
+      "Vermasoft",
+      "IAG"
+    ]
   }),
 
   computed: {
@@ -217,8 +239,8 @@ export default {
 
   methods: {
     initialize() {
-      // Initialize the desserts array with the new structure
-      this.desserts = [
+      // Initialize the candidates array with the new structure
+      this.candidates = [
         {
           firstName: "Abrham",
           lastName: "Addis",
@@ -289,19 +311,19 @@ export default {
     },
 
     editItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
+      this.editedIndex = this.candidates.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
 
     deleteItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
+      this.editedIndex = this.candidates.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
     },
 
     deleteItemConfirm() {
-      this.desserts.splice(this.editedIndex, 1);
+      this.candidates.splice(this.editedIndex, 1);
       this.closeDelete();
     },
 
@@ -323,9 +345,9 @@ export default {
 
     save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem);
+        Object.assign(this.candidates[this.editedIndex], this.editedItem);
       } else {
-        this.desserts.push(this.editedItem);
+        this.candidates.push(this.editedItem);
       }
       this.close();
     },
