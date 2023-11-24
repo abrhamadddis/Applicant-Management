@@ -122,10 +122,41 @@
             <v-card-title>
               <span class="text-h5">Item Information</span>
             </v-card-title>
-            
+            <v-col>
+              <v-row>
+                <v-col>
+                  <v-img
+                    src="https://cdn.vuetifyjs.com/images/john.png"
+                    alt="John"
+                    class="w-50"
+                  ></v-img>
+                </v-col>
+                <v-col>
+                  <p>First Name: {{ clickedItem.firstName }}</p>
+                  <p>Last Name: {{ clickedItem.lastName }}</p>
+                  <p>Foreign Name: {{ clickedItem.foreignName }}</p>
+                </v-col>
+                <v-col>
+                  <p> Applied For: {{ clickedItem.position }}</p>
+                  <p>Desired salary: 500</p>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col>
+                  <p>Location: {{ clickedItem.location }}</p>
+                  <p>Email: {{ clickedItem.email }}</p>
+                  <p>Phone Number: {{ clickedItem.phoneNumber }}</p>
+                </v-col>
+              </v-row>
+            </v-col>
             <v-card-text>
-              <p>First Name: {{ clickedItem.firstName }}</p>
-              <p>Last Name: {{ clickedItem.lastName }}</p>
+            <p>Current Client: {{ clickedItem.currentClient }}</p>
+            <p>Foreign Name: {{ clickedItem.foreignName }}</p>
+            
+            <p>CV: {{ clickedItem.cv }}</p>
+            <p>Source: {{ clickedItem.source }}</p>
+            <p>Status: {{ clickedItem.status }}</p>
+            <p>Overall Feedback: {{ clickedItem.overAllFeedBack }}</p>
               <!-- Display other item information here -->
             </v-card-text>
             <v-card-actions>
@@ -275,6 +306,7 @@ export default {
           lastName: "Addis",
           email: "abrhamaddis32@gmail.com",
           phoneNumber: "0978464825",
+          position: 'cvent developer',
           location: "Addis Ababa",
           status: "Interviewed",
         },
