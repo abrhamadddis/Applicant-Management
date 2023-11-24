@@ -9,7 +9,7 @@
         <v-toolbar-title>Candidates</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
-        <v-dialog v-model="dialog" max-width="500px">
+        <v-dialog v-model="dialog" max-width="1000px">
           <template v-slot:activator="{ props }">
             <v-btn color="primary" dark class="mb-2" v-bind="props">
               Add Candidate
@@ -49,14 +49,50 @@
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field
+                      v-model="editedItem.position"
+                      label="Position"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field
+                      v-model="editedItem.currentClient"
+                      label="Current Client"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field
+                      v-model="editedItem.foreignName"
+                      label="Foreign Name"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field
                       v-model="editedItem.location"
                       label="Location"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field
+                      v-model="editedItem.cv"
+                      label="Upload Cv"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field
+                      v-model="editedItem.source"
+                      label="Source"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field
                       v-model="editedItem.status"
                       label="Status"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field
+                      v-model="editedItem.overAllFeedBack"
+                      label="Over All Feedback"
                     ></v-text-field>
                   </v-col>
                 </v-row>
@@ -133,16 +169,30 @@ export default {
       lastName: "",
       email: "",
       phoneNumber: "",
+      position:"",
+      currentClient:"",
+      foreignName: "",
       location: "",
+      cv:"",
+      source: "",
       status: "",
+      overAllFeedBack: "",
+
+
     },
     defaultItem: {
       firstName: "",
       lastName: "",
       email: "",
       phoneNumber: "",
+      position:"",
+      currentClient:"",
+      foreignName: "",
       location: "",
+      cv:"",
+      source: "",
       status: "",
+      overAllFeedBack: "",
     },
   }),
 
