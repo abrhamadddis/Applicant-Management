@@ -136,6 +136,9 @@
         </v-dialog>
       </v-toolbar>
     </template>
+    <template v-slot:item.status="{ item }">
+      <v-chip :color="getStatusColor(item.status)" dark>{{ item.status }}</v-chip>
+    </template>
     <template v-slot:item.actions="{ item }">
       <v-icon size="small" class="me-2" @click="editItem(item)">
         mdi-pencil
@@ -263,7 +266,7 @@ export default {
           email: "dawit.alemayehu@gmail.com",
           phoneNumber: "0923456789",
           location: "Addis Ababa",
-          status: "Hired",
+          status: "Offered",
         },
         {
           firstName: "Hannah",
@@ -279,7 +282,7 @@ export default {
           email: "samuelwondimu55@gmail.com",
           phoneNumber: "0911122334",
           location: "Addis Ababa",
-          status: "Pending Review",
+          status: "Offered",
         },
         {
           firstName: "Sara",
@@ -287,7 +290,7 @@ export default {
           email: "saraassefa88@gmail.com",
           phoneNumber: "0976123456",
           location: "Addis Ababa",
-          status: "Interview Scheduled",
+          status: "Rejected",
         },
         {
           firstName: "Yonas",
@@ -295,7 +298,7 @@ export default {
           email: "yonasmengistu66@gmail.com",
           phoneNumber: "0967890123",
           location: "Addis Ababa",
-          status: "Final Round",
+          status: "Offered",
         },
         {
           firstName: "Ruth",
@@ -303,7 +306,7 @@ export default {
           email: "ruthkassa22@gmail.com",
           phoneNumber: "0909876543",
           location: "Addis Ababa",
-          status: "Offer Extended",
+          status: "Rejected",
         },
 
         // Add more items as needed
@@ -351,6 +354,21 @@ export default {
       }
       this.close();
     },
+    getStatusColor(status) {
+      switch (status) {
+        case 'Pending':
+          return 'blue';
+        case 'Interviewed':
+          return 'orange';
+        case 'Offered':
+          return 'green';
+        case 'Rejected':
+          return 'red';
+        default:
+          return 'grey';
+      }
+    }
+
   },
 };
 </script>
