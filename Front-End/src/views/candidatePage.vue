@@ -157,10 +157,17 @@
              </v-row>
              <v-row>
                 <v-col>
-                  <v-card   class="pb-8 pt-2 px-2">
+                  <v-chip :color="getStatusColor(clickedItem.status)" dark>
+                    
+                      <v-card-title class="px-4 ">
+                        <h3 class="pb-10 h-12 pt-10">{{ clickedItem.status }}</h3>  
+                      </v-card-title>
+                    
+                  </v-chip>
+                  <!-- <v-card   class="pb-8 pt-2 px-2">
                     <p>Status</p>
                     <v-chip :color="getStatusColor(clickedItem.status)" dark>{{ clickedItem.status }}</v-chip>
-                  </v-card>
+                  </v-card> -->
                   <v-card class="my-2 px-2 py-2">
                     <p>CV: {{ clickedItem.cv }}</p>
                   </v-card>
