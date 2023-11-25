@@ -1,7 +1,7 @@
 <template>
    <v-data-table
      :headers="headers"
-     :items="jobs"
+     :items="filteredJobs"
      :sort-by="[{ key: 'user_id', order: 'asc' }]"
    >
      <template v-slot:top>
@@ -9,12 +9,21 @@
          <v-toolbar-title>Jobs</v-toolbar-title>
          <v-divider class="mx-4" inset vertical></v-divider>
          <v-spacer></v-spacer>
-         <v-dialog v-model="dialog" max-width="500px">
+         <v-text-field
+          v-model="search"
+          append-icon="mdi-magnify"
+          label="Search"
+          variant="underlined"
+          single-line
+          hide-details
+        ></v-text-field>
+         <v-dialog v-model="dialog" max-width="1000px">
            <template v-slot:activator="{ props }">
              <v-btn color="primary" dark class="mb-2" v-bind="props">
                Add Job
              </v-btn>
            </template>
+           
            <v-card>
              <v-card-title>
                <span class="text-h5">{{ formTitle }}</span>
@@ -73,10 +82,12 @@
              </v-card-actions>
            </v-card>
          </v-dialog>
+         
        </v-toolbar>
      </template>
      <template v-slot:item.company_name="{ item }">
  <div>
+  
  {{ getCompanyName(item.company_name) }}
  </div>
  </template>
@@ -114,10 +125,11 @@
      jobForm
    },
    data: () => ({
-      editedItem: {},
-     dialog: false,
-     dialogDelete: false,
-     headers: [
+    search: '',
+    editedItem: {},
+    dialog: false,
+    dialogDelete: false,
+    headers: [
        { title: "Title", key: "title" },
        { title: "Company", key: "company_name" },
        { title: "Location", key: "location" },
@@ -163,6 +175,26 @@
       },
    }),
   computed: {
+  filteredJobs() {
+    if (!this.search) {
+      return this.jobs;
+    }
+    const query = this.search.toLowerCase();
+    return this.jobs.filter(job => {
+      return (
+        job.title.toLowerCase().includes(query) ||
+        job.company_name.toLowerCase().includes(query) ||
+        job.location.toLowerCase().includes(query) ||
+        job.job_type.toLowerCase().includes(query) ||
+        job.experience.toLowerCase().includes(query) ||
+        job.job_summary.toLowerCase().includes(query) ||
+        job.responsibilities.toLowerCase().includes(query) ||
+        job.requirements.some(requirement =>
+          requirement.toLowerCase().includes(query)
+        )
+      );
+    });
+  },
    colorMap() {
  const colorMap = store.state.colorMap;
  this.jobs.forEach(job => {

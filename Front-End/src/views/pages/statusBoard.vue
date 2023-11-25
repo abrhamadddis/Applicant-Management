@@ -1,8 +1,39 @@
 <template>
     <div>
       <div v-for="(statusCount, status) in statusCounts" :key="status">
-        <div style="display: flex; align-items: center;">
-      <span style="margin-right: 10px; width:30px;">{{ getStatusLabel(status) }}</span>
+        <div class="flex items-center p-2 rounded-md ">
+          <div class="flex flex-col p-2 items-center">
+            <v-icon
+  v-if="status === '1'"
+  class="text-blue-500 bg-blue-100 rounded-full p-4"
+>
+  mdi-eye
+</v-icon>
+<v-icon
+  v-else-if="status === '2'"
+  class="text-blue-500 bg-blue-100 rounded-full p-4"
+>
+  mdi-phone
+</v-icon>
+<v-icon
+  v-else-if="status === '3'"
+  class="text-blue-500 bg-blue-100 rounded-full p-4"
+>
+  mdi-account-multiple
+</v-icon>
+<v-icon
+  v-else-if="status === '4'"
+  class="text-blue-500 bg-blue-100 rounded-full p-4"
+>
+  mdi-account-check
+</v-icon>
+<v-icon
+  v-else-if="status === '5'"
+  class="text-blue-500 bg-blue-100 rounded-full p-4"
+>
+  mdi-thumb-up
+</v-icon>
+   <span style="margin-right: 10px; width:30px;">{{ getStatusLabel(status) }}</span></div>
         <v-progress-linear
           color="primary"
           bg-color="pink-lighten-3"

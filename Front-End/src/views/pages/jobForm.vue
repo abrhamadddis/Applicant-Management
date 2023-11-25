@@ -4,12 +4,14 @@
       <v-col cols="12" md="6">
         <v-text-field
           v-model="editedItem.user_id"
+          variant="underlined"
           label="User ID"
         ></v-text-field>
       </v-col>
       <v-col cols="12" md="6">
         <v-text-field
           v-model="editedItem.title"
+          variant="underlined"
           label="Title"
         ></v-text-field>
       </v-col>
@@ -20,42 +22,49 @@
           :item-props="itemProps"
           item-text="company_name"
           return-object="false"
+          variant="underlined"
           label="Company"
         ></v-select>
       </v-col>
       <v-col cols="12" md="6">
         <v-text-field
           v-model="editedItem.location"
+          variant="underlined"
           label="Location"
         ></v-text-field>
       </v-col>
       <v-col cols="12" md="6">
         <v-text-field
           v-model="editedItem.job_type"
+          variant="underlined"
           label="Job Type"
         ></v-text-field>
       </v-col>
       <v-col cols="12" md="6">
         <v-text-field
           v-model="editedItem.experience"
+          variant="underlined"
           label="Experience"
         ></v-text-field>
       </v-col>
       <v-col cols="12">
         <v-textarea
           v-model="editedItem.job_summary"
+          variant="underlined"
           label="Job Summary"
         ></v-textarea>
       </v-col>
       <v-col cols="12" md="6">
         <v-text-field
           v-model="editedItem.responsibilities"
+          variant="underlined"
           label="Responsibilities"
         ></v-text-field>
       </v-col>
       <v-col cols="12" md="6">
         <v-checkbox
           v-model="editedItem.is_active"
+          variant="underlined"
           label="Is Active"
         ></v-checkbox>
       </v-col>
@@ -69,12 +78,13 @@
         ></v-combobox>
       </v-col> -->
       <v-combobox
- v-model="editedItem.requirements"
- :items="requirements"
- label="Requirements"
- multiple
- chips
->
+        v-model="editedItem.requirements"
+        :items="requirements"
+        label="Requirements"
+        variant="underlined"
+        multiple
+        chips
+      >
  <template v-slot:selection="data">
    <v-chip
      :selected="data.selected"
@@ -90,6 +100,7 @@
         <v-text-field
           v-model="editedItem.created_at"
           label="Created At"
+          variant="underlined"
           readonly
         ></v-text-field>
       </v-col>
@@ -97,6 +108,7 @@
         <v-text-field
           v-model="editedItem.updated_at"
           label="Updated At"
+          variant="underlined"
           readonly
         ></v-text-field>
       </v-col>
@@ -122,8 +134,8 @@
   data() {
     return {
       job: data[0],
-    companies: company_name,
-   requirements: [],
+      companies: company_name,
+      requirements: [],
       // companies: data.company,
       // requirements: data.requirement,
     };

@@ -1,4 +1,5 @@
 <template>
+  <div class="bg-white rounded-lg overflow-hidden shadow-lg transform hover:scale-101 transition duration-300 border-l-4 border-blue">
   <v-card>
     <v-card-text class="d-flex align-center pb-4">
       <img
@@ -6,7 +7,6 @@
         :src="image"
         alt="image"
       >
-
       <v-spacer />
 
       <MoreBtn
@@ -34,6 +34,8 @@
       </span>
     </v-card-text>
   </v-card>
+</div>
+  
 </template>
 
 <script>
