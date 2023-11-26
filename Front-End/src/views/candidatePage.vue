@@ -2,7 +2,7 @@
   <v-data-table
     :headers="headers"
     :items="desserts"
-    :sort-by="[{ key: 'calories', order: 'asc' }]"
+    :sort-by="[{ key: 'firstName', order: 'asc' }]"
   >
     <template v-slot:top>
       <v-toolbar flat>
@@ -45,6 +45,12 @@
                     <v-text-field
                       v-model="editedItem.phoneNumber"
                       label="Phone Number"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field
+                      v-model="editedItem.current_client"
+                      label="company Name"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
@@ -122,6 +128,7 @@ export default {
       { title: "Last Name", key: "lastName" },
       { title: "Email", key: "email" },
       { title: "Phone Number", key: "phoneNumber" },
+      { title: "Company Name", key: "current_client" },
       { title: "Location", key: "location" },
       { title: "Status", key: "status" },
       { title: "Actions", key: "actions", sortable: false },
@@ -135,6 +142,7 @@ export default {
       phoneNumber: "",
       location: "",
       status: "",
+      current_client: "",
     },
     defaultItem: {
       firstName: "",
@@ -143,6 +151,7 @@ export default {
       phoneNumber: "",
       location: "",
       status: "",
+      current_client: "",
     },
   }),
 
@@ -166,6 +175,7 @@ export default {
   },
 
   methods: {
+
     initialize() {
       // Initialize the desserts array with the new structure
       this.desserts = [
@@ -175,6 +185,7 @@ export default {
           email: "abrhamaddis32@gmail.com",
           phoneNumber: "0978464825",
           location: "Addis Ababa",
+          current_client: "ACI",
           status: "Interviewed",
         },
         {
@@ -183,6 +194,7 @@ export default {
           email: "merontekle44@gmail.com",
           phoneNumber: "0912345678",
           location: "Addis Ababa",
+          current_client: "CCI",
           status: "Pending",
         },
         {
@@ -191,6 +203,7 @@ export default {
           email: "dawit.alemayehu@gmail.com",
           phoneNumber: "0923456789",
           location: "Addis Ababa",
+          current_client: "CCI",
           status: "Hired",
         },
         {
@@ -199,6 +212,7 @@ export default {
           email: "hannahgirma77@gmail.com",
           phoneNumber: "0998765432",
           location: "Addis Ababa",
+          current_client: "CCI",
           status: "Rejected",
         },
         {
@@ -207,6 +221,7 @@ export default {
           email: "samuelwondimu55@gmail.com",
           phoneNumber: "0911122334",
           location: "Addis Ababa",
+          current_client: "ACI",
           status: "Pending Review",
         },
         {
@@ -215,6 +230,7 @@ export default {
           email: "saraassefa88@gmail.com",
           phoneNumber: "0976123456",
           location: "Addis Ababa",
+          current_client: "CCI",
           status: "Interview Scheduled",
         },
         {
@@ -223,6 +239,7 @@ export default {
           email: "yonasmengistu66@gmail.com",
           phoneNumber: "0967890123",
           location: "Addis Ababa",
+          current_client: "BCI",
           status: "Final Round",
         },
         {
@@ -231,6 +248,7 @@ export default {
           email: "ruthkassa22@gmail.com",
           phoneNumber: "0909876543",
           location: "Addis Ababa",
+          current_client: "CCI",
           status: "Offer Extended",
         },
 

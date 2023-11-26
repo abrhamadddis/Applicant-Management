@@ -1,6 +1,6 @@
 const company = [
     {
-        company_name: 'CCI',
+        current_client: 'CCI',
         phone_number: '0909090909',
         location:'nowhere',
         created_by: 'auser',
@@ -9,7 +9,7 @@ const company = [
         updated_at: '',
     },
     {
-        company_name: 'ACI',
+        current_client: 'ACI',
         phone_number: '0909090909',
         location:'nowhere',
         created_by: 'auser',
@@ -18,7 +18,7 @@ const company = [
         updated_at: '',
     },
     {
-        company_name: 'BCI',
+        current_client: 'BCI',
         phone_number: '0909090909',
         location:'nowhere',
         created_by: 'auser',

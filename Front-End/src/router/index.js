@@ -18,6 +18,11 @@ const routes = [
         component: () => import('@/views/candidatePage.vue'),
       },
       {
+        path: '/candidates/:companyName', // Dynamic route for company name
+        name: 'Candidates',
+        component: () => import('@/views/CandidatesPage.vue'),
+      },
+      {
         path: '/jobs',
         name: 'jobs',
         component: () => import('@/views/jobsPage.vue'),

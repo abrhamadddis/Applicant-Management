@@ -1,6 +1,7 @@
 <script setup>
 import statusBoard from '@/views/pages/statusBoard.vue'
 import CardStatisticsVertical from '../@core/components/cards/CardStatisticsVertical.vue'
+import CalendarGraph from '@/views/pages/calendarGraph.vue'
 // 👉 Images
 import chart from '../assets/chart-success.png'
 import wallet from '../assets/wallet-info.png'
@@ -88,7 +89,7 @@ export default {
 
        
         </VCol>
-
+     
         <!-- 👉 Sales -->
         <VCol
           cols="12"
@@ -115,6 +116,7 @@ export default {
       cols="12"
       sm="12"
     >
+   
       <VRow>
         <!-- 👉 Profit -->
         <VCol
@@ -169,6 +171,18 @@ export default {
             }"
           />
         </VCol>
+        <VRow>
+      <VCol
+      cols="6"
+      md="12">
+      <VCol
+      cols="12"
+      md="12"
+    >
+      <CalendarGraph />
+    </VCol>
+      </VCol>
+    </VRow>
           <!-- 👉 Tabs chart -->
           <!-- <VCol>
   <v-timeline direction="horizontal" line-inset="12">

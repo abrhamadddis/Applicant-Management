@@ -17,10 +17,10 @@
       </v-col>
       <v-col cols="12" md="6">
         <v-select
-          v-model="editedItem.company_name"
+          v-model="editedItem.current_client"
           :items="companies"
           :item-props="itemProps"
-          item-text="company_name"
+          item-text="current_client"
           return-object="false"
           variant="underlined"
           label="Company"
@@ -118,7 +118,7 @@
  
  <script>
  import data from '../../assets/tables/jobTable.js';
- import company_name from '../../assets/tables/companyTable'
+ import current_client from '../../assets/tables/companyTable'
  export default {
 
   props: {
@@ -127,14 +127,14 @@
   methods: {
     itemProps(item) {
       return {
-        title: item.company_name,
+        title: item.current_client,
       }
     },
   },
   data() {
     return {
       job: data[0],
-      companies: company_name,
+      companies: current_client,
       requirements: [],
       // companies: data.company,
       // requirements: data.requirement,

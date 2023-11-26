@@ -2,7 +2,7 @@ const data=[
 {   
     user_id:  '',
     title: 'test',
-    company_name: 'CCI', 
+    current_client: 'CCI', 
     location: 'test',
     job_type: 'test',
     experience: 'test', 
@@ -18,7 +18,7 @@ const data=[
 {   
     user_id:  '',
     title: 'test',
-    company_name: 'CCI', 
+    current_client: 'CCI', 
     location: 'test',
     job_type: 'test',
     experience: 'test', 
@@ -34,7 +34,7 @@ const data=[
 {   
     user_id:  '',
     title: 'test',
-    company_name: 'BCI', 
+    current_client: 'BCI', 
     location: 'test',
     job_type: 'test',
     experience: 'test', 
@@ -50,7 +50,7 @@ const data=[
 {   
     user_id:  '',
     title: 'test',
-    company_name: 'ACI', 
+    current_client: 'ACI', 
     location: 'test',
     job_type: 'test',
     experience: 'test', 
@@ -66,7 +66,7 @@ const data=[
 {   
     user_id:  '',
     title: 'test',
-    company_name: 'test', 
+    current_client: 'test', 
     location: 'test',
     job_type: 'test',
     experience: 'test', 
@@ -82,7 +82,7 @@ const data=[
 {   
     user_id:  '',
     title: 'test',
-    company_name: 'CCI', 
+    current_client: 'CCI', 
     location: 'test',
     job_type: 'test',
     experience: 'test', 
@@ -98,7 +98,7 @@ const data=[
 {   
     user_id:  '',
     title: 'test',
-    company_name: 'test', 
+    current_client: 'test', 
     location: 'test',
     job_type: 'test',
     experience: 'test', 
@@ -114,7 +114,7 @@ const data=[
 {   
     user_id:  '',
     title: 'test',
-    company_name: 'test', 
+    current_client: 'test', 
     location: 'test',
     job_type: 'test',
     experience: 'test', 

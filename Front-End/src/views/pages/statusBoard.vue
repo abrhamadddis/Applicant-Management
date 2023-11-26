@@ -2,38 +2,38 @@
     <div>
       <div v-for="(statusCount, status) in statusCounts" :key="status">
         <div class="flex items-center p-2 rounded-md ">
-          <div class="flex flex-col p-2 items-center">
+          <div class="flex  items-center">
+                        <v-icon
+              v-if="status === '1'"
+              class="text-blue-500 bg-blue-100 rounded-full p-4"
+            >
+              mdi-eye
+            </v-icon>
             <v-icon
-  v-if="status === '1'"
-  class="text-blue-500 bg-blue-100 rounded-full p-4"
->
-  mdi-eye
-</v-icon>
-<v-icon
-  v-else-if="status === '2'"
-  class="text-blue-500 bg-blue-100 rounded-full p-4"
->
-  mdi-phone
-</v-icon>
-<v-icon
-  v-else-if="status === '3'"
-  class="text-blue-500 bg-blue-100 rounded-full p-4"
->
-  mdi-account-multiple
-</v-icon>
-<v-icon
-  v-else-if="status === '4'"
-  class="text-blue-500 bg-blue-100 rounded-full p-4"
->
-  mdi-account-check
-</v-icon>
-<v-icon
-  v-else-if="status === '5'"
-  class="text-blue-500 bg-blue-100 rounded-full p-4"
->
-  mdi-thumb-up
-</v-icon>
-   <span style="margin-right: 10px; width:30px;">{{ getStatusLabel(status) }}</span></div>
+              v-else-if="status === '2'"
+              class="text-blue-500 bg-blue-100 rounded-full p-4"
+            >
+              mdi-phone
+            </v-icon>
+            <v-icon
+              v-else-if="status === '3'"
+              class="text-blue-500 bg-blue-100 rounded-full p-4"
+            >
+              mdi-account-multiple
+            </v-icon>
+            <v-icon
+              v-else-if="status === '4'"
+              class="text-blue-500 bg-blue-100 rounded-full p-4"
+            >
+              mdi-account-check
+            </v-icon>
+            <v-icon
+              v-else-if="status === '5'"
+              class="text-blue-500 bg-blue-100 rounded-full p-4"
+            >
+              mdi-thumb-up
+            </v-icon>
+   <span style="margin-right: 3px; margin-left:13px; width:20px;">{{ getStatusLabel(status) }}</span></div>
         <v-progress-linear
           color="primary"
           bg-color="pink-lighten-3"
@@ -43,7 +43,7 @@
             <!-- <strong>{{ progressValue(statusCount) }}%</strong> -->
           </template>
         </v-progress-linear>
-        <span style="margin-left: 50px;">{{ statusCount }} </span>
+        <span style="margin-left: 70px;">{{ statusCount }} </span>
         <br>
         <br>
         </div>
@@ -57,7 +57,7 @@
   export default {
     data() {
       return {
-        maximumCount: 10, // Maximum count for each status
+        maximumCount: 7, // Maximum count for each status
       };
     },
     computed: {
