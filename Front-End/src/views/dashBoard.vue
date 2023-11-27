@@ -50,7 +50,7 @@ export default {
   <VRow
   class="mx-6 my-6" >
 
-    <!-- 👉 Congratulations -->
+    <!-- 👉 status board -->
     <VCol
       cols="12"
       md="8"
@@ -63,7 +63,22 @@ export default {
       sm="4"
     >
       <VRow>
-        <!-- 👉 Profit -->
+        <!-- 👉 new opening -->
+        <VCol
+          cols="12"
+          md="12"
+        >
+        <div class="bg-white rounded-lg overflow-hidden transform transition duration-300">
+          <div class="h-1  animate-shimmer"></div>
+          <div class="flex justify-center py-4">
+      <div class="font-bold text-xl mb-2 text-gray-800 text-center">Latest Candidates   </div>
+      <button @click.prevent="goToCandidatePage" class="px-2  transition duration-300 transform hover:scale-110 text-blue-500">
+           View All
+      </button>
+    </div>
+  </div>
+
+        </VCol>
         <VCol
           cols="12"
           md="6"
@@ -77,37 +92,38 @@ export default {
     
       <div class="bg-white rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-300">
     <div class="h-1 bg-gradient-to-r from-blue-400 to-blue-600 animate-shimmer"></div>
-    <div class="px-6 py-4">
-      <div class="font-bold text-xl mb-2 text-gray-800 text-center">New Openings</div>
+    <div class="px-6 py-2">
+      <div class="font-bold text-l mb-2 text-gray-800 text-center">New Openings</div>
     </div>
-    <div class="flex justify-center py-4">
-      <button @click.prevent="goToJobPage" class="bg-blue-500 rounded-full p-4 transition duration-300 transform hover:scale-110 shadow-md">
-        <v-icon class="text-4xl text-white">mdi-plus</v-icon>
+    <div class="flex justify-center py-2">
+      <button @click.prevent="goToJobPage" class="bg-blue-500 rounded-full p-2 transition duration-300 transform hover:scale-110 shadow-md">
+        <v-icon class="text-3xl text-white">mdi-plus</v-icon>
       </button>
     </div>
   </div>
 
        
         </VCol>
-     
-        <!-- 👉 Sales -->
+       
+        <!-- 👉 add candidates -->
         <VCol
           cols="12"
           md="6"
         >
         <div class="bg-white rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-300">
     <div class="h-1 bg-gradient-to-r from-blue-400 to-blue-600 animate-shimmer"></div>
-    <div class="px-6 py-4">
-      <div class="font-bold text-xl mb-2 text-gray-800 text-center">Add Candidates</div>
+    <div class="px-6 py-2">
+      <div class="font-bold text-l mb-2 text-gray-800 text-center">Add Candidates</div>
     </div>
-    <div class="flex justify-center py-4">
-      <button @click.prevent="goToCandidatePage" class="bg-blue-500 rounded-full p-4 transition duration-300 transform hover:scale-110 shadow-md">
-        <v-icon class="text-4xl text-white">mdi-plus</v-icon>
+    <div class="flex justify-center py-2">
+      <button @click.prevent="goToCandidatePage" class="bg-blue-500 rounded-full p-2 transition duration-300 transform hover:scale-110 shadow-md">
+        <v-icon class="text-3xl text-white">mdi-plus</v-icon>
       </button>
     </div>
   </div>
 
         </VCol>
+        
       </VRow>
     </VCol>
 
@@ -118,14 +134,14 @@ export default {
     >
    
       <VRow>
-        <!-- 👉 Profit -->
+        <!-- 👉 Achieved / Applied candidates -->
         <VCol
           cols="6"
           md="3"
         >
           <CardStatisticsVertical
             v-bind="{
-              title: 'Unread CVs',
+              title: 'Achieved / Applied candidates',
               image: chart,
               stats: '18',
               change: 72.80,
@@ -142,7 +158,7 @@ export default {
               title: 'Number of Candidate',
               image: wallet,
               stats: getCandidateCount(),
-              change: 12,
+              // change: 12,
             }"
           />
         </VCol>
@@ -152,7 +168,7 @@ export default {
         >
           <CardStatisticsVertical
             v-bind="{
-              title: 'Pending Task',
+              title: 'Out Dated Jobs',
               image: wallet,
               stats: getCandidateCount(),
             }"
@@ -165,7 +181,7 @@ export default {
         >
           <CardStatisticsVertical
             v-bind="{
-              title: 'Number of Jobs',
+              title: 'Number of Jobs currently',
               image: wallet,
               stats: getJobsCount(),
             }"
