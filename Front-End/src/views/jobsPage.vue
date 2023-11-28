@@ -207,7 +207,7 @@
    },
    data: () => ({
     search: '',
-    editedItem: {},
+    // editedItem: {},
     dialog: false,
     dialogDelete: false,
     infoDialog: false,
