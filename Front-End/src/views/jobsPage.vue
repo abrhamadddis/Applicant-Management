@@ -104,7 +104,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" height="5rem" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/></svg>
                         <v-col>
                       <p>Title: {{ clickedItem.title }}</p>
-                      <p>Company: {{ clickedItem.current_client }}</p>
+                      <p>Company: {{ clickedItem.company }}</p>
                       <p>Location: {{ clickedItem.location }}</p>
                     </v-col>
                 </v-row>
@@ -163,12 +163,12 @@
         </v-dialog> 
        </v-toolbar>
      </template>
-     <template v-slot:item.current_client="{ item }">
-      <router-link :to="{ name: 'Candidates', params: { companyName: item.current_client } }">
-    {{ getCompanyName(item.current_client) }}
+     <template v-slot:item.company="{ item }">
+      <router-link :to="{ name: 'Candidates', params: { companyName: item.company } }">
+    {{ getCompanyName(item.company) }}
   </router-link>
         <!-- <div>
-   {{ getCompanyName(item.current_client) }}
+   {{ getCompanyName(item.company) }}
  </div> -->
  </template>
      <template v-slot:item.requirements="{ item }">
@@ -197,9 +197,10 @@
   </template>
   
   <script>
-  import data from '../assets/tables/jobTable';
+  // import data from '../assets/tables/jobTable';
   import jobForm from './pages/jobForm.vue';
   import {store} from '../store/color';
+  import axios from 'axios';
 
   export default {
    components: {
@@ -214,7 +215,7 @@
     clickedItem: null,
     headers: [
        { title: "Title", key: "title" },
-       { title: "Company", key: "current_client" },
+       { title: "Company", key: "company" },
        { title: "Location", key: "location" },
        { title: "Job Type", key: "job_type" },
        { title: "Experience", key: "experience" },
@@ -228,7 +229,7 @@
      editedItem: {
        user_id: "",
        title: "",
-       current_client: "",
+       company: "",
        location: "",
        job_type: "",
        experience: "",
@@ -244,7 +245,7 @@
      defaultItem: {
        user_id: "",
        title: "",
-       current_client: "",
+       company: "",
        location: "",
        job_type: "",
        experience: "",
@@ -259,7 +260,7 @@
    }),
   computed: {
     companyName() {
-  return this.$route.params.current_client;
+  return this.$route.params.company;
  },
   filteredJobs() {
     if (!this.search) {
@@ -269,7 +270,7 @@
     return this.jobs.filter(job => {
       return (
         job.title.toLowerCase().includes(query) ||
-        job.current_client.toLowerCase().includes(query) ||
+        job.company.toLowerCase().includes(query) ||
         job.location.toLowerCase().includes(query) ||
         job.job_type.toLowerCase().includes(query) ||
         job.experience.toLowerCase().includes(query) ||
@@ -311,15 +312,28 @@
       val || this.closeDelete();
     },
   },
-  created() {
-    this.initialize();
-  },
+  // created() {
+    // this.initialize();
+    // },
+    created() {
+ axios.get('http://localhost:8000/api/jobs')
+   .then(response => {
+     this.jobs = response.data;
+     console.log(this.jobs);
+   })
+   .catch(error => {
+     console.error('Error fetching data: ', error);
+   });
+},
+
   methods: {
-    goToCandidates(current_client) {
-    this.$router.push({ name: 'Candidates', params: { companyName: current_client } });
+    goToCandidates(company) {
+    this.$router.push({ name: 'Candidates', params: { companyName: company } });
   },
     initialize() {
       this.jobs = data;
+      // console.log(data);
+      // console.log(this.jobs);
     },
     editItem(item) {
       this.editedIndex = this.jobs.indexOf(item);
@@ -373,7 +387,7 @@
   if (typeof company === 'string') {
     return company;
   } else if (typeof company === 'object' && company !== null) {
-    return company.current_client;
+    return company.company;
   } else {
     return '';
   }

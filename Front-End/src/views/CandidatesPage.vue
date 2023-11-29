@@ -171,8 +171,10 @@
    </template>
    
    <script>
-   import candidateData from "../assets/tables/candidateTable";
-   
+//    import candidateData from "../assets/tables/candidateTable";
+   import axios from "axios";
+
+
    export default {
     data() {
       return {
@@ -241,14 +243,26 @@
     },
     created() {
       // Replace this with the imported data
-      this.candidates = candidateData;
-   
+    //   this.candidates = candidateData;
+   axios.get('http://localhost:8000/api/candidates')
+   .then(response => {
+     this.candidates = response.data;
+     console.log("thiss",this.candidates);
+   })
+   .catch(error => {
+     console.error('Error fetching data: ', error);
+   });
       // Simulating a delay for data loading
       setTimeout(() => {
         this.loading = false;
       }, 1000);
     },
     methods: {
+        initialize() {
+      this.candidates = data;
+    //   console.log(data);
+      console.log("this is",this.candidates);
+    },
       editItem(item) {
         this.editedIndex = this.candidates.indexOf(item);
         this.editedItem = Object.assign({}, item);
