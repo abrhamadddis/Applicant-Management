@@ -6,11 +6,11 @@
           <span class="font-weight-light">MMCY</span>
           <span>Tech</span>
         </v-toolbar-title>
-        <v-btn flat color="company">
+        <v-btn flat color="company" v-if="isAuthenticated" @click="logout">
           <span>sign out</span>
           <v-icon right>exit_to_app</v-icon>
         </v-btn>
-        <v-btn flat color="company">
+        <v-btn flat color="company" v-if="!isAuthenticated">
           <span>sign in</span>
           <v-icon right>exit_to_app</v-icon>
         </v-btn>
@@ -55,8 +55,30 @@
       </v-navigation-drawer>
     </nav>
   </template>
-  <script>
-  export default {
+<script>
+import { defineComponent } from 'vue';
+import { useAuthStore } from '@/store/auth';
+
+  export default defineComponent ({
+    computed: {
+    isAuthenticated() {
+      return useAuthStore().token !== '';
+    },
+    isAdminOrSuperAdmin() {
+      const role = useAuthStore().role;
+      return role === 'admin' || role === 'superadmin';
+    },
+    isSuperAdmin() {
+      return useAuthStore().role === 'superadmin';
+    },
+    },
+    methods: {
+        logout() {
+        const authStore = useAuthStore();
+        authStore.clearToken();
+        this.$router.push('/');
+      },
+    },
     data() {
       return {
         drawer: false,
@@ -66,6 +88,6 @@
     components:{
   
     }
-  };
+  });
   </script>
   
