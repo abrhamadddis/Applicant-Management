@@ -33,6 +33,10 @@ const updateCandidate = asyncHandler(async (req, res) => {
     const { _id: updatedBy } = req.user;
     req.body.updated_by = updatedBy;
 
+    if (req.body.status) {
+      req.body.status_updated_at = new Date();
+    }
+
     const candidate = await Candidate.findByIdAndUpdate(req.params.id, req.body, { new: true });
     res.json(candidate);
   } catch (err) {

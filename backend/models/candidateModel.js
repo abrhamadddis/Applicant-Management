@@ -9,6 +9,7 @@ const candidateSchema = mongoose.Schema({
   location: { type: String },
   source: { type: String, enum: ['Linkedin', 'Telegram_bot', 'Tiktok', 'Dereja', 'University'] },
   status: { type: String, enum: ['Rejected', 'Interviewed', 'Pending', 'Offered'] },
+  status_updated_at:  { type: Date, default: Date.now },
   reason: { type: String },
   CV: { type: String, default: '' },
   overall_feedback: { type: String },
