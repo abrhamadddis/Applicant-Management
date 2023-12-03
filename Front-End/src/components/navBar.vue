@@ -18,7 +18,7 @@
       <v-navigation-drawer temporary v-model="drawer"  class="indigo">
         <v-list>
           <br>
-          <v-list-item class="d-flex justify-start pl-5 pt-15 " router :to="'/'">
+          <v-list-item class="d-flex justify-start pl-5 pt-15 " router :to="'/dashboard'">
               <v-list-title-action class="pr-5">
                   <v-icon><svg width="30px" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="grid-2" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="svg-inline--fa fa-grid-2 fa-lg"><path fill="currentColor" d="M224 80c0-26.5-21.5-48-48-48H80C53.5 32 32 53.5 32 80v96c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48V80zm0 256c0-26.5-21.5-48-48-48H80c-26.5 0-48 21.5-48 48v96c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48V336zM288 80v96c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48H336c-26.5 0-48 21.5-48 48zM480 336c0-26.5-21.5-48-48-48H336c-26.5 0-48 21.5-48 48v96c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48V336z" class=""></path></svg></v-icon>
               </v-list-title-action>

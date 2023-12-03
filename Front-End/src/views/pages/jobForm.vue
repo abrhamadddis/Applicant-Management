@@ -1,13 +1,13 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" md="6">
+      <!-- <v-col cols="12" md="6">
         <v-text-field
           v-model="editedItem.user_id"
           variant="underlined"
           label="User ID"
         ></v-text-field>
-      </v-col>
+      </v-col> -->
       <v-col cols="12" md="6">
         <v-text-field
           v-model="editedItem.title"
@@ -16,15 +16,11 @@
         ></v-text-field>
       </v-col>
       <v-col cols="12" md="6">
-        <v-select
+        <v-text-field
           v-model="editedItem.current_client"
-          :items="companies"
-          :item-props="itemProps"
-          item-text="current_client"
-          return-object="false"
           variant="underlined"
           label="Company"
-        ></v-select>
+        ></v-text-field>
       </v-col>
       <v-col cols="12" md="6">
         <v-text-field
@@ -95,7 +91,7 @@
    </v-chip>
  </template>
 </v-combobox>
-
+<!-- 
       <v-col cols="12" md="6">
         <v-text-field
           v-model="editedItem.created_at"
@@ -111,26 +107,57 @@
           variant="underlined"
           readonly
         ></v-text-field>
-      </v-col>
+      </v-col> -->
+      <v-btn @click="saveJobData">Save</v-btn>
+   <v-btn @click="deleteJobData">Delete</v-btn>
     </v-row>
   </v-container>
  </template>
  
  <script>
  import data from '../../assets/tables/jobTable.js';
- import current_client from '../../assets/tables/companyTable'
+ import current_client from '../../assets/tables/companyTable';
+ import axios from 'axios'
  export default {
 
   props: {
-    editedItem: Object,
-  },
-  methods: {
-    itemProps(item) {
-      return {
-        title: item.current_client,
-      }
-    },
-  },
+   editedItem: Object,
+   editedIndex: Number,
+ },
+ methods: {
+   saveJobData() {
+    if (this.editedIndex > -1) {
+      axios.put(`http://localhost:8010/api/jobs/${this.editedItem._id}`, this.editedItem)
+       .then(response => {
+           console.log('Job updated:', response.data);
+           this.$emit('job-updated', response.data);
+         })
+         .catch(error => {
+           console.log('Error updating job:', error);
+         });
+     } else {
+       // If editedIndex is -1, this means we are creating a new job
+       axios.post('http://localhost:8010/api/jobs', this.editedItem)
+         .then(response => {
+           console.log('Job created:', response.data);
+           this.$emit('job-created', response.data);
+         })
+         .catch(error => {
+           console.log('Error creating job:', error);
+         });
+     }
+   },
+   deleteJobData() {
+     axios.delete(`http://localhost:8010/api/jobs/${this.editedItem.id}`)
+       .then(response => {
+         console.log('Job deleted:', response.data);
+         this.$emit('job-deleted');
+       })
+       .catch(error => {
+         console.log('Error deleting job:', error);
+       });
+   },
+ },
   data() {
     return {
       job: data[0],

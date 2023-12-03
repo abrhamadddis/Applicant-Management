@@ -61,7 +61,7 @@
        >
          Log In
        </v-btn>
- 
+<!--  
        <v-card-text class="text-center">
          <a
            class="text-blue text-decoration-none"
@@ -71,7 +71,7 @@
          >
            Sign up now <v-icon icon="mdi-chevron-right"></v-icon>
          </a>
-       </v-card-text>
+       </v-card-text> -->
      </v-card>
    </form>
  </template>
@@ -97,7 +97,7 @@ export default {
       }
 
       try {
-        const response = await fetch('http://localhost:8000/api/auth/login', {
+        const response = await fetch('http://localhost:8010/api/auth/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

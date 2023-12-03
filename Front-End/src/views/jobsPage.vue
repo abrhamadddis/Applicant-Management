@@ -36,28 +36,125 @@
              <v-card-title>
                <span class="text-h5">{{ formTitle }}</span>
              </v-card-title>
-             <v-card-text>
-               <job-form :editedItem="editedItem"></job-form>
-     </v-card-text>
              <!-- <v-card-text>
-               <v-container>
-                 <v-row>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      v-model="editedItem.user_id"
-                      label="User ID"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      v-model="editedItem.title"
-                      label="Title"
-                    ></v-text-field>
-                  </v-col>
-                 </v-row>
-               </v-container>
-             </v-card-text> -->
-  
+               <job-form :editedItem="editedItem"></job-form>
+              </v-card-text> -->
+              <v-card-text>
+                <!-- <job-form :editedItem="editedItem" :editedIndex="editedIndex" @job-updated="jobUpdated" @job-created="jobCreated" @job-deleted="jobDeleted"></job-form> -->
+
+                <v-container>
+    <v-row>
+      <!-- <v-col cols="12" md="6">
+        <v-text-field
+          v-model="editedItem.user_id"
+          variant="underlined"
+          label="User ID"
+        ></v-text-field>
+      </v-col> -->
+      <v-col cols="12" md="6">
+        <v-text-field
+          v-model="editedItem.title"
+          variant="underlined"
+          label="Title"
+        ></v-text-field>
+      </v-col>
+      <v-col cols="12" md="6">
+        <v-text-field
+          v-model="editedItem.current_client"
+          variant="underlined"
+          label="Company"
+        ></v-text-field>
+      </v-col>
+      <v-col cols="12" md="6">
+        <v-text-field
+          v-model="editedItem.location"
+          variant="underlined"
+          label="Location"
+        ></v-text-field>
+      </v-col>
+      <v-col cols="12" md="6">
+        <v-text-field
+          v-model="editedItem.job_type"
+          variant="underlined"
+          label="Job Type"
+        ></v-text-field>
+      </v-col>
+      <v-col cols="12" md="6">
+        <v-text-field
+          v-model="editedItem.experience"
+          variant="underlined"
+          label="Experience"
+        ></v-text-field>
+      </v-col>
+      <v-col cols="12">
+        <v-textarea
+          v-model="editedItem.job_summary"
+          variant="underlined"
+          label="Job Summary"
+        ></v-textarea>
+      </v-col>
+      <v-col cols="12" md="6">
+        <v-text-field
+          v-model="editedItem.responsibilities"
+          variant="underlined"
+          label="Responsibilities"
+        ></v-text-field>
+      </v-col>
+      
+    
+          <v-col cols="12" md="6">
+        <v-checkbox
+          v-model="editedItem.is_active"
+          variant="underlined"
+          label="Is Active"
+        ></v-checkbox>
+      </v-col>
+      
+      <!-- <v-col cols="12">
+        <v-combobox
+          v-model="editedItem.requirements"
+          :items="requirements"
+          label="Requirements"
+          multiple
+          chips
+        ></v-combobox>
+      </v-col> -->
+      <v-combobox
+        v-model="editedItem.requirements"
+        :items="requirements"
+        label="Requirements"
+        variant="underlined"
+        multiple
+        chips
+      >
+ <template v-slot:selection="data">
+   <v-chip
+     :selected="data.selected"
+     close
+     @input="data.parent.selectItem(data.item)"
+   >
+     {{ data.item }}
+   </v-chip>
+ </template>
+</v-combobox>
+<v-col cols="12" md="6">
+        <!-- <v-text-field
+          variant="underlined"
+          label="Responsibilities"
+          >
+          <Datepicker v-model="picked" />
+        </v-text-field> -->
+        <div>
+          Job End Date:
+        </div>
+        <Datepicker v-model="picked" class="custom-datepicker" ></Datepicker>
+        <!-- <v-date-picker v-model="picked" class="custom-datepicker"></v-date-picker> -->
+        </v-col>  
+</v-row>
+</v-container>
+
+              </v-card-text>
+             
              <v-card-actions>
                <v-spacer></v-spacer>
                <v-btn color="blue-darken-1" variant="text" @click="close">
@@ -69,19 +166,22 @@
              </v-card-actions>
            </v-card>
          </v-dialog>
-         <v-dialog v-model="dialogDelete" max-width="500px">
-           <v-card>
-             <v-card-title class="text-h5">
+         <v-dialog v-model="dialogDelete" max-width="500px" > 
+           <v-card >
+             <v-card-title class="text-h5 ">
                Are you sure you want to delete this item?
              </v-card-title>
              <v-card-actions>
                <v-spacer></v-spacer>
-               <v-btn color="blue-darken-1" variant="text" @click="closeDelete">
+               <v-btn 
+               color="success"
+          variant="elevated"
+          @click="closeDelete">
                  Cancel
                </v-btn>
                <v-btn
-                 color="blue-darken-1"
-                 variant="text"
+               color="error"
+          variant="outlined"
                  @click="deleteItemConfirm"
                >
                  OK
@@ -95,7 +195,7 @@
           </template>
           <v-card class="px-8 py-8">
             <v-card-title>
-              <span class="text-h5">Candidate Profile</span>
+              <span class="text-h5">Job Profile</span>
             </v-card-title>
             <v-col>
               <v-row >
@@ -164,12 +264,12 @@
        </v-toolbar>
      </template>
      <template v-slot:item.current_client="{ item }">
-      <router-link :to="{ name: 'Candidates', params: { companyName: item.current_client } }">
+      <!-- <router-link :to="{ name: 'Candidates', params: { companyName: item.current_client } }">
     {{ getCompanyName(item.current_client) }}
-  </router-link>
-        <!-- <div>
+  </router-link> -->
+        <div>
    {{ getCompanyName(item.current_client) }}
- </div> -->
+ </div>
  </template>
      <template v-slot:item.requirements="{ item }">
  <div>
@@ -195,32 +295,38 @@
   </div>
   <!-- </div> -->
   </template>
-  
+ <script setup>
+ import Datepicker from 'vue3-datepicker'
+ import { ref } from 'vue'
+ const picked = ref(new Date())
+ </script> 
   <script>
-  import data from '../assets/tables/jobTable';
-  import jobForm from './pages/jobForm.vue';
+  // import data from '../assets/tables/jobTable';
+  // import jobForm from './pages/jobForm.vue';
   import {store} from '../store/color';
+  import axios from 'axios';
 
-  export default {
-   components: {
-     jobForm
+export default {
+  components: {
+    //  jobForm
+    // DatePick
    },
    data: () => ({
-    search: '',
-    // editedItem: {},
+    search: '',    
+    editedItem: {},
     dialog: false,
     dialogDelete: false,
     infoDialog: false,
     clickedItem: null,
     headers: [
+       { title: "User ID", key: "_id" },
        { title: "Title", key: "title" },
        { title: "Company", key: "current_client" },
        { title: "Location", key: "location" },
        { title: "Job Type", key: "job_type" },
        { title: "Experience", key: "experience" },
-       { title: "Job Summary", key: "job_summary" },
        { title: "Responsibilities", key: "responsibilities" },
-       { title: "Requirements", key: "requirements" },
+       { title: "Skills", key: "requirements" },
        { title: "Actions", key: "actions", sortable: false },
      ],
      jobs: [],
@@ -259,8 +365,8 @@
    }),
   computed: {
     companyName() {
-  return this.$route.params.current_client;
- },
+      return this.$route.params.current_client;
+    },
   filteredJobs() {
     if (!this.search) {
       return this.jobs;
@@ -268,13 +374,13 @@
     const query = this.search.toLowerCase();
     return this.jobs.filter(job => {
       return (
-        job.title.toLowerCase().includes(query) ||
+        // job.title.toLowerCase().includes(query) ||
         job.current_client.toLowerCase().includes(query) ||
         job.location.toLowerCase().includes(query) ||
         job.job_type.toLowerCase().includes(query) ||
         job.experience.toLowerCase().includes(query) ||
-        job.job_summary.toLowerCase().includes(query) ||
-        job.responsibilities.toLowerCase().includes(query) ||
+        // job.job_summary.toLowerCase().includes(query) ||
+        // job.responsibilities.toLowerCase().includes(query) ||
         job.requirements.some(requirement =>
           requirement.toLowerCase().includes(query)
         )
@@ -311,57 +417,87 @@
       val || this.closeDelete();
     },
   },
+  
   created() {
-    this.initialize();
-  },
-  methods: {
-    goToCandidates(current_client) {
-    this.$router.push({ name: 'Candidates', params: { companyName: current_client } });
-  },
-    initialize() {
-      this.jobs = data;
-    },
-    editItem(item) {
-      this.editedIndex = this.jobs.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialog = true;
-    },
-    showItemInfo(item) {
-  this.clickedItem = item;
-  this.infoDialog = true;
+   this.fetchJobs();
+ },
+ methods: {
+   fetchJobs() {
+     axios.get('http://localhost:8010/api/jobs/')
+       .then(response => {
+         this.jobs = response.data;
+         console.log(this.jobs)
+       })
+       .catch(error => {
+         console.error(error);
+       });
+   },
+   showItemInfo(item) {
+this.clickedItem = item;
+this.infoDialog = true;
 },
-    deleteItem(item) {
-      this.editedIndex = this.jobs.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialogDelete = true;
-    },
-    deleteItemConfirm() {
-      this.jobs.splice(this.editedIndex, 1);
-      this.closeDelete();
-    },
-    close() {
-      this.dialog = false;
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
+   editItem(item) {
+     this.editedIndex = this.jobs.indexOf(item);
+     this.editedItem = Object.assign({}, item);
+     this.dialog = true;
+   },
+   deleteItem(item) {
+     this.editedIndex = this.jobs.indexOf(item);
+     this.editedItem = Object.assign({}, item);
+     this.dialogDelete = true;
+   },
+   deleteItemConfirm() {
+     axios.delete(`http://localhost:8010/api/jobs/${this.editedItem._id}`)
+       .then(() => {
+         this.jobs.splice(this.editedIndex, 1);
+         this.closeDelete();
+       })
+       .catch(error => {
+         console.error(error);
+       });
+   },
+   close() {
+     this.dialog = false;
+     this.$nextTick(() => {
+       this.editedItem = Object.assign({}, this.defaultItem);
+       this.editedIndex = -1;
+     });
+   },
+   closeDelete() {
+     this.dialogDelete = false;
+     this.$nextTick(() => {
+       this.editedItem = Object.assign({}, this.defaultItem);
+       this.editedIndex = -1;
+     });
+   },
+   save() {
+      if (this.editedIndex > -1 && this.jobs && this.jobs.length > this.editedIndex) {
+    // Update existing job
+    axios.put(`http://localhost:8010/api/jobs/${this.editedItem._id}`, this.editedItem)
+      .then(response => {
+        console.log(response.data); // Check the updated job data received from the API
+  if (response && response.data) {
+    this.jobs[this.editedIndex] = response.data;
+  }
+      })
+      .catch(error => {
+        console.error(error);
       });
-    },
-    closeDelete() {
-      this.dialogDelete = false;
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      });
-    },
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.jobs[this.editedIndex], this.editedItem);
-      } else {
-        this.jobs.push(this.editedItem);
-      }
-      this.close();
-    },
-    randomColor() {
+
+     } else {
+       // Create new job
+       axios.post('http://localhost:8010/api/jobs/', this.editedItem)
+         .then(response => {
+           this.jobs.push(response.data);
+           console.log(this.jobs)
+         })
+         .catch(error => {
+           console.error(error);
+         });
+     }
+     this.close();
+   },
+   randomColor() {
    const letters = '0123456789ABCDEF';
    let color = '#';
    for (let i = 0; i < 6; i++) {
@@ -369,23 +505,51 @@
    }
    return color;
  },
- getCompanyName(company) {
-  if (typeof company === 'string') {
-    return company;
-  } else if (typeof company === 'object' && company !== null) {
-    return company.current_client;
-  } else {
-    return '';
-  }
+   getCompanyName(company) {
+if (typeof company === 'string') {
+  return company;
+} else if (typeof company === 'object' && company !== null) {
+  return company.current_client;
+} else {
+  return '';
+}
+},
  },
-  },
 };
 </script>
-  
 <style>
 .bg-lightGrey {
   background-color: #f5f5f5; /* Or any light grey color you prefer */
   padding-left: 10px;
   padding-right: 10px;
 }
+
+.custom-datepicker {
+  --vdp-bg-color: #ffffff;
+  --vdp-text-color: #ff0000;
+  --vdp-box-shadow: 0 4px 10px 0 rgba(128, 144, 160, 0.1), 0 0 1px 0 rgba(128, 144, 160, 0.81);
+  --vdp-border-radius: 3px;
+  --vdp-heading-size: 2.5em;
+  --vdp-heading-weight: bold;
+  --vdp-heading-hover-color: #eeeeee;
+  --vdp-arrow-color: currentColor;
+  --vdp-elem-color: currentColor;
+  --vdp-disabled-color: #d5d9e0;
+  --vdp-hover-color: #ffffff;
+  --vdp-hover-bg-color: #af0b0b;
+  --vdp-selected-color: #ffffff;
+  --vdp-selected-bg-color: #af0b0b;
+  --vdp-current-date-outline-color: #888888;
+  --vdp-current-date-font-weight: bold;
+  --vdp-elem-font-size: 0.8em;
+  --vdp-elem-border-radius: 3px;
+  --vdp-divider-color: #d5d9e0;
+}
 </style>
+
+
+
+
+
+
+
