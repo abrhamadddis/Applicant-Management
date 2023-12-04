@@ -3,8 +3,10 @@ import statusBoard from '@/views/pages/statusBoard.vue'
 import CardStatisticsVertical from '../@core/components/cards/CardStatisticsVertical.vue'
 import CalendarGraph from '@/views/pages/calendarGraph.vue'
 // 👉 Images
-import chart from '../assets/chart-success.png'
-import wallet from '../assets/wallet-info.png'
+import jobsicon from '../assets/jobs.png'
+import appliedCandidates from '../assets/appliedCandidates.png'
+import outdatedJobs from '../assets/outdatedJobs.png'
+import candidatesicon from '../assets/searchJob.png'
 import { useRouter } from 'vue-router';
 // import datatable from '../assets/tables/dataTable';
 // import jobtable from '../assets/tables/jobTable';
@@ -127,7 +129,7 @@ export default {
     >
     
   <div class="bg-white rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-300">
-    <div class="h-1 bg-gradient-to-r from-blue-400 to-blue-600"></div>
+    <div class="h-1 bg-primary"></div>
     <div class="px-6 py-2">
       <div class="font-bold text-l mb-2 text-gray-800 text-center">Latest Candidates</div>
     </div>
@@ -149,12 +151,12 @@ export default {
    md="4">
         
       <div class="bg-white rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-300">
-      <div class="h-1 bg-gradient-to-r from-blue-400 to-blue-600"></div>
+      <div class="h-1 bg-secondary"></div>
       <div class="px-6 py-2">
       <div class="font-bold text-l mb-2 text-gray-800 text-center">New Openings</div>
       </div>
       <div class="flex justify-center py-2">
-        <button @click.prevent="goToJobPage" class="bg-blue-500 rounded-full p-2 transition duration-300 transform hover:scale-110 shadow-md">
+        <button @click.prevent="goToJobPage" class="bg-primary rounded-full p-2 transition duration-300 transform hover:scale-110 shadow-md">
         <v-icon class="text-3xl text-white">mdi-plus</v-icon>
         </button>
       </div>
@@ -167,12 +169,12 @@ export default {
      md="4"
   >
        <div class="bg-white rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-300">
-      <div class="h-1 bg-gradient-to-r from-blue-400 to-blue-600"></div>
+      <div class="h-1 bg-secondary"></div>
       <div class="px-6 py-2">
       <div class="font-bold text-l mb-2 text-gray-800 text-center">Add Candidates</div>
       </div>
       <div class="flex justify-center py-2">
-      <button @click.prevent="goToCandidatePage" class="bg-blue-500 rounded-full p-2 transition duration-300 transform hover:scale-110 shadow-md">
+      <button @click.prevent="goToCandidatePage" class="bg-primary rounded-full p-2 transition duration-300 transform hover:scale-110 shadow-md">
         <v-icon class="text-3xl text-white">mdi-plus</v-icon>
       </button>
       </div>
@@ -197,7 +199,7 @@ md="12"
     sm="3">
     <div class="px-6 py-2">
       <div class="font-bold text-l mb-2 text-gray-800 text-center">Latest Candidates
-      <button @click.prevent="goToCandidatePage" class="text-blue-500  p-2 transition duration-300 transform hover:scale-110 ">
+      <button @click.prevent="goToCandidatePage" class="text-primary  p-2 transition duration-300 transform hover:scale-110 ">
         view all
       </button>
       </div>
@@ -219,7 +221,7 @@ md="12"
           <CardStatisticsVertical
             v-bind="{
               title: 'Number of Jobs currently',
-              image: wallet,
+              image: jobsicon,
               stats: jobs.length,
             }"
           />
@@ -233,7 +235,7 @@ md="12"
           <CardStatisticsVertical
             v-bind="{
               title: 'Achieved / Applied candidates',
-              image: chart,
+              image: appliedCandidates,
               stats: candidates.filter(candidate => candidate.status === Offered).length,
             }"
           />
@@ -246,7 +248,7 @@ md="12"
           <CardStatisticsVertical
             v-bind="{
               title: 'Number of Candidate',
-              image: wallet,
+              image: candidatesicon,
               stats: candidates.length,
               // change: 12,
             }"
@@ -259,7 +261,7 @@ md="12"
           <CardStatisticsVertical
             v-bind="{
               title: 'Out Dated Jobs',
-              image: wallet,
+              image: outdatedJobs,
               stats: jobs.filter(job => job.is_active === false).length,
             }"
           />

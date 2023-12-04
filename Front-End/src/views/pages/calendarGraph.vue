@@ -32,7 +32,7 @@ const series = {
     21,
     30,
     22,
-    42,
+    40,
     26,
     35,
     35,
@@ -67,31 +67,54 @@ const chartConfig = computed(() => ({
   ],
  },
  yaxis: {
-  min: 10,
-  max: 50,
+  min: 5,
+  max: 40,
   show: false,
   tickAmount: 4,
  },
+ colors: ['#FF694B'], // Set the desired color (orange) for the area chart
 }))
 </script>
 
 <template>
-    <div>
+  <div>
     <div>
         <div class="font-bold text-xl mb-3 my-3 text-gray-800">Interview schedule</div>
     </div>
     <div>
-    <button @click="currentTab = '3Days'" class="m-2 p-2 text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50 shadow-md">3 Days</button>
-    <button @click="currentTab = '7Days'" class="m-2 p-2 text-black bg-green-500 rounded hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 shadow-md">7 Days</button>
-    <button @click="currentTab = '10Days'" class="m-2 p-2 text-black bg-green-500 rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-opacity-50 shadow-md">10 Days</button>
+      <v-hover
+        v-slot="{ isHovering, props }"
+        open-delay="200"
+      >
+        <button @click="currentTab = '3Days'" :elevation="isHovering ? 16 : 2"
+          :class="{ 'on-hover': isHovering }"
+          class="mx-auto"
+          height="350"
+          max-width="350"
+          v-bind="props"
+        >
+          3 Days
+        </button>
+        <button @click="currentTab = '7Days'" class="m-2 p-2 text-black bg-deep-orange-lighten-5 rounded hover:bg-white focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50 shadow-md">
+          7 Days
+        </button>
+        <button @click="currentTab = '10Days'" class="m-2 p-2 text-black bg-deep-orange-lighten-5 rounded hover:bg-white focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-opacity-50 shadow-md">
+          10 Days
+        </button>
+      </v-hover>
    
-    <VueApexCharts
-    type="area"
-    :options="chartConfig"
-    :series="series[currentTab]"
-    height="300px"
-    />
+      <VueApexCharts
+        type="area"
+        :options="chartConfig"
+        :series="series[currentTab]"
+        height="300px"
+      />
     </div>
-    </div>
-   </template>
-   
+  </div>
+</template>
+
+<style scoped>
+.v-card:not(.on-hover) {
+  background-color: rgba(#94d300, 0.8)
+}
+</style>

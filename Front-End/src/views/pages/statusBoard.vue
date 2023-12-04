@@ -1,37 +1,37 @@
 <template>
     <div class="shadow-lg  p-6">
 
-      <p class="text-blue-500 px-2 py-2 text-xl">Stages</p>
+      <p class="text-black-500 px-2 py-2 text-xl">Stages</p>
       <div v-for="(statusCount, status) in statusCounts" :key="status">
         <div class="flex items-center p-2 m-2 rounded-md ">
           <div class="flex  items-center " style="width:24vw">
                         <v-icon
               v-if="status === 'Rejected'"
-              class="text-blue-500 bg-blue-100 rounded-full p-4"
+              class="text-primary bg-deep-orange-lighten-5 rounded-full p-4"
             >
               mdi-eye
             </v-icon>
             <v-icon
               v-else-if="status === 'Interviewed'"
-              class="text-blue-500 bg-blue-100 rounded-full p-4"
+              class="text-primary bg-deep-orange-lighten-5 rounded-full p-4"
             >
               mdi-phone
             </v-icon>
             <v-icon
               v-else-if="status === 'Pending'"
-              class="text-blue-500 bg-blue-100 rounded-full p-4"
+              class="text-primary bg-deep-orange-lighten-5 rounded-full p-4"
             >
               mdi-account-multiple
             </v-icon>
             <v-icon
               v-else-if="status === 'Offered'"
-              class="text-blue-500 bg-blue-100 rounded-full p-4"
+              class="text-primary bg-deep-orange-lighten-5 rounded-full p-4"
             >
               mdi-account-check
             </v-icon>
             <v-icon
               v-else-if="status === 'Hired'"
-              class="text-blue-500 bg-blue-100 rounded-full p-4"
+              class="text-primary bg-deep-orange-lighten-5 rounded-full p-4"
             >
               mdi-thumb-up
             </v-icon>

@@ -4,12 +4,16 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        "desaturated-dark-cyan": "#5BA4A4",
+        primary: "#FF694B",
+        secondary: "#FF694B",
+        background: "#F2F2F2", 
+         "desaturated-dark-cyan": "#5BA4A4",
         "light-grayish-cyan-bg": "#EFFAFA",
         "light-grayish-cyan-filter": "#EEF6F6",
         "very-light-grayish-cyan": "#B7C4C4",
         "dark-grayish-cyan": "#7B8E8E",
         "very-dark-grayish-cyan": "#2C3A3A",
+
       },
       fontFamily: {
         "league-spartan": ["'League-Spartan', sans-serif"],
