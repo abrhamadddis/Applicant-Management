@@ -1,11 +1,16 @@
 <template>
-   <form @submit.prevent="login">
+   <form @submit.prevent="login" class="mt-5 pt-10 flex justify-items-center">
+      <v-img
+      class="mx-auto my-6"
+      max-width="228"
+      src="../assets/mmcylogo.png"
+    ></v-img>
      <v-card
        class="mx-auto pa-12 pb-8"
        elevation="8"
        max-width="448"
        rounded="lg"
-     >
+     >     
        <div class="text-subtitle-1 text-medium-emphasis">Account</div>
  
        <v-text-field
@@ -47,7 +52,7 @@
          variant="tonal"
        >
          <v-card-text class="text-medium-emphasis text-caption">
-           Warning: After 3 consecutive failed login attempts, you account will be temporarily locked for three hours. If you must login now, you can also click "Forgot login password?" below to reset the login password.
+           Note: Attempting to access the system without the correct login credentials may result in security measures being applied to your account. Ensure you have the necessary information or seek assistance to avoid any inconvenience.
          </v-card-text>
        </v-card>
  
@@ -61,17 +66,6 @@
        >
          Log In
        </v-btn>
- 
-       <v-card-text class="text-center">
-         <a
-           class="text-blue text-decoration-none"
-           href="#"
-           rel="noopener noreferrer"
-           target="_blank"
-         >
-           Sign up now <v-icon icon="mdi-chevron-right"></v-icon>
-         </a>
-       </v-card-text>
      </v-card>
    </form>
  </template>
