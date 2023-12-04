@@ -217,7 +217,7 @@
     </template>
     <template v-slot:item.actions="{ item }">
       <v-icon @click=showItemInfo(item)> mdi-eye </v-icon>
-      <v-icon size="small" class="me-2" @click="editItem(item)">
+      <v-icon @click="editItem(item)" size="small" class="me-2" >
         mdi-pencil
       </v-icon>
       <v-icon size="small" @click="deleteItem(item)"> mdi-delete </v-icon>
@@ -396,9 +396,13 @@ export default {
     editItem(item) {
       this.editedIndex = this.candidates.indexOf(item);
       this.editedItem = Object.assign({}, item);
-      this.editedIndex = this.candidates.indexOf(item);
-      this.dialogDelete = true;
+      this.dialog = true
     },
+    deleteItem (item) {
+        this.editedIndex = this.candidates.indexOf(item)
+        this.editedItem = Object.assign({}, item)
+        this.dialogDelete = true
+      },
 
     deleteItemConfirm() {
       this.candidates.splice(this.editedIndex, 1);
