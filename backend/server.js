@@ -1,20 +1,22 @@
 const express = require('express');
 const colors = require('colors');
+const cors = require('cors')
 const dotenv = require('dotenv').config();
 const { errorHandler } = require('./middleware/errorMiddleware');
 const connectDB = require('./config/db');
 const port = process.env.PORT || 8000;
 
+
 connectDB();
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-const cors = require('cors');
 
 app.use(cors({
-  origin: 'http://127.0.0.1:4173',
+  origin: 'http://localhost:3000',
   methods: 'GET,POST,PUT,DELETE',
   credentials: true,
 }));
