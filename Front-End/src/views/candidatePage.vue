@@ -25,13 +25,13 @@
                 <v-row>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field
-                      v-model="editedItem.firstName"
+                      v-model="editedItem.first_name"
                       label="First Name"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field
-                      v-model="editedItem.lastName"
+                      v-model="editedItem.last_name"
                       label="Last Name"
                     ></v-text-field>
                   </v-col>
@@ -43,7 +43,7 @@
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field
-                      v-model="editedItem.phoneNumber"
+                      v-model="editedItem.phone_number"
                       label="Phone Number"
                     ></v-text-field>
                   </v-col>
@@ -62,7 +62,7 @@
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field
-                      v-model="editedItem.foreignName"
+                      v-model="editedItem.foreign_name"
                       label="Foreign Name"
                     ></v-text-field>
                   </v-col>
@@ -95,7 +95,7 @@
                   </v-col>
                   <v-col cols="12" sm="12" md="12">
                     <v-textarea
-                      v-model="editedItem.overAllFeedBack"
+                      v-model="editedItem.overall_feedback"
                       label="Over All Feedback"
                     ></v-textarea>
                   </v-col>
@@ -128,9 +128,9 @@
                       <v-row>
                         <svg xmlns="http://www.w3.org/2000/svg" height="5rem" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/></svg>
                         <v-col>
-                      <p>First Name: {{ clickedItem.firstName }}</p>
-                      <p>Last Name: {{ clickedItem.lastName }}</p>
-                      <p>Foreign Name: {{ clickedItem.foreignName }}</p>
+                      <p>First Name: {{ clickedItem.first_name }}</p>
+                      <p>Last Name: {{ clickedItem.last_name }}</p>
+                      <p>Foreign Name: {{ clickedItem.foreign_name }}</p>
                     </v-col>
                 </v-row>
               </v-col>
@@ -151,7 +151,7 @@
                   </v-row>
                   <v-row>
                     <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z"/></svg>
-                    <p class="pl-2"> {{ clickedItem.phoneNumber }}</p>
+                    <p class="pl-2"> {{ clickedItem.phone_number }}</p>
                   </v-row>
               </v-col>
              </v-row>
@@ -177,7 +177,7 @@
                 </v-col>
                 <v-col cols="9">
                   <v-card >
-                    <p class="px-2 py-2">Overall Feedback: {{ clickedItem.overAllFeedBack }}</p>
+                    <p class="px-2 py-2">Overall Feedback: {{ clickedItem.overall_feedback }}</p>
                   </v-card>
               </v-col>
               </v-row>
@@ -229,22 +229,25 @@
   </v-data-table>
 </template>
 <script>
+import axios from 'axios'
+import {getCandidates, getCandidateById, createCandidate, updateCandidate} from '../service/candidateService'
 export default {
   data: () => ({
     dialog: false,
     dialogDelete: false,
     infoDialog: false,
     clickedItem: null,
+    test: '656e2353655fa6c8c73f4648',
     headers: [
       {
         title: "First Name",
         align: "start",
         sortable: false,
-        key: "firstName",
+        key: "first_name",
       },
-      { title: "Last Name", key: "lastName" },
+      { title: "Last Name", key: "last_name" },
       { title: "Email", key: "email" },
-      { title: "Phone Number", key: "phoneNumber" },
+      { title: "Phone Number", key: "phone_number" },
       { title: "Company Name", key: "current_client" },
       { title: "Location", key: "location" },
       { title: "Status", key: "status" },
@@ -253,34 +256,34 @@ export default {
     candidates: [],
     editedIndex: -1,
     editedItem: {
-      firstName: "",
-      lastName: "",
+      first_name: "",
+      last_name: "",
       email: "",
-      phoneNumber: "",
+      phone_number: "",
       position:"",
       currentClient:"",
-      foreignName: "",
+      foreign_name: "",
       location: "",
       cv:"",
       source: "",
       status: "",
-      overAllFeedBack: "",
+      overall_feedback: "",
 
 
     },
     defaultItem: {
-      firstName: "",
-      lastName: "",
+      first_name: "",
+      last_name: "",
       email: "",
-      phoneNumber: "",
+      phone_number: "",
       position:"",
       currentClient:"",
-      foreignName: "",
+      foreign_name: "",
       location: "",
       cv:"",
       source: "",
       status: "",
-      overAllFeedBack: "",
+      overall_feedback: "",
     },
     statuses:[
       "Pending",
@@ -323,84 +326,36 @@ export default {
 
   methods: {
 
-    initialize() {
-      // Initialize the candidates array with the new structure
-      this.candidates = [
-        {
-          firstName: "Abrham",
-          lastName: "Addis",
-          email: "abrhamaddis32@gmail.com",
-          phoneNumber: "0978464825",
-          position: 'cvent developer',
-          location: "Addis Ababa",
-          current_client: "ACI",
-          status: "Interviewed",
-          overAllFeedBack: "over all feedback about his person spans 12 out of 12 columns on extra small to small screens, 6 out of 12 columns on small to medium screens, and 4 out of 12 columns on medium and larger screens. If you want to increase the width, you can adjust these values. For instance, if you want the textarea to take up half the screen on medium and larger screens, you"
-        },
-        {
-          firstName: "Meron",
-          lastName: "Tekle",
-          email: "merontekle44@gmail.com",
-          phoneNumber: "0912345678",
-          location: "Addis Ababa",
-          current_client: "CCI",
-          status: "Pending",
-        },
-        {
-          firstName: "Dawit",
-          lastName: "Alemayehu",
-          email: "dawit.alemayehu@gmail.com",
-          phoneNumber: "0923456789",
-          location: "Addis Ababa",
-          status: "Offered",
-        },
-        {
-          firstName: "Hannah",
-          lastName: "Girma",
-          email: "hannahgirma77@gmail.com",
-          phoneNumber: "0998765432",
-          location: "Addis Ababa",
-          current_client: "CCI",
-          status: "Rejected",
-        },
-        {
-          firstName: "Samuel",
-          lastName: "Wondimu",
-          email: "samuelwondimu55@gmail.com",
-          phoneNumber: "0911122334",
-          location: "Addis Ababa",
-          current_client: "ACI",
-          status: "Pending Review",
-        },
-        {
-          firstName: "Yonas",
-          lastName: "Mengistu",
-          current_client: "BCI",
+    async initialize() {
+      try {
+        const response = await getCandidates()
 
-          status: "Offered",
-
-        },
-        {
-          firstName: "Ruth",
-          lastName: "Kassa",
-          email: "ruthkassa22@gmail.com",
-          phoneNumber: "0909876543",
-          location: "Addis Ababa",
-          status: "Rejected",
-        },
-
-        // Add more items as needed
-      ];
+        this.candidates = response.data;
+      } catch (error) {
+        console.error(error);
+      }
     },
 
-    editItem(item) {
+    async editItem(item) {
+      try{
       this.editedIndex = this.candidates.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+      this.editedItem = item;
       this.dialog = true
+     
+    
+      const apiEndpoint = await updateCandidate(this.editedItem._id, this.editedItem);
+      console.log("from candidate page",apiEndpoint)
+      Object.assign(this.candidates[this.editedIndex], apiEndpoint);
+      console.log(this.editedItem)
+      
+      } catch(error) {
+      console.error(error);
+      }
     },
     deleteItem (item) {
         this.editedIndex = this.candidates.indexOf(item)
         this.editedItem = Object.assign({}, item)
+       
         this.dialogDelete = true
       },
 
