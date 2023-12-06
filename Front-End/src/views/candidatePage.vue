@@ -336,21 +336,10 @@ export default {
       }
     },
 
-    async editItem(item) {
-      try{
+    editItem(item) {
       this.editedIndex = this.candidates.indexOf(item);
       this.editedItem = item;
       this.dialog = true
-     
-    
-      const apiEndpoint = await updateCandidate(this.editedItem._id, this.editedItem);
-      console.log("from candidate page",apiEndpoint)
-      Object.assign(this.candidates[this.editedIndex], apiEndpoint);
-      console.log(this.editedItem)
-      
-      } catch(error) {
-      console.error(error);
-      }
     },
     deleteItem (item) {
         this.editedIndex = this.candidates.indexOf(item)
@@ -380,9 +369,17 @@ export default {
       });
     },
 
-    save() {
+    async save() {
       if (this.editedIndex > -1) {
         Object.assign(this.candidates[this.editedIndex], this.editedItem);
+        try{
+          const apiEndpoint = await updateCandidate(this.editedItem._id, this.editedItem);
+          console.log("from candidate page",apiEndpoint)
+          Object.assign(this.candidates[this.editedIndex], apiEndpoint);
+          console.log(this.editedItem)
+        }catch(error){
+          console.error(error);
+        }
       } else {
         this.candidates.push(this.editedItem);
       }
