@@ -382,6 +382,12 @@ export default {
         }
       } else {
         this.candidates.push(this.editedItem);
+        try{
+          const newCandidate = await createCandidate(this.editedItem);
+          console.log(newCandidate)
+        }catch(error){
+          console.error(error);
+        }
       }
       this.close();
     },

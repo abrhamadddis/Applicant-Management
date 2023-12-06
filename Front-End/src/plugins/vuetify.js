@@ -19,6 +19,9 @@ export default createVuetify({
         colors: {
           primary: '#1867C0',
           secondary: '#5CBBF6',
+          mmcyOrange: 'rgb(255, 105, 75, 0.9);',
+          mmcyGray: 'rgb(25, 32, 48, 0.8)'
+
         },
       },
     },

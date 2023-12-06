@@ -25,7 +25,7 @@
          Password
  
          <a
-           class="text-caption text-decoration-none text-blue"
+           class="text-caption text-decoration-none text-mmcyOrange"
            href="#"
            rel="noopener noreferrer"
            target="_blank"
@@ -59,7 +59,7 @@
        <v-btn
          block
          class="mb-8"
-         color="blue"
+         color="mmcyOrange"
          size="large"
          variant="tonal"
          type="submit"
