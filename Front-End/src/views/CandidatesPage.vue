@@ -11,7 +11,7 @@
       class="my-5 mx-auto bg-white shadow-lg rounded-lg"
         :headers="headers"
         :items="filteredCandidates"
-        :sort-by="[{ key: 'firstName', order: 'asc' }]"
+        :sort-by="[{ key: 'first_name', order: 'asc' }]"
         v-if="!loading && filteredCandidates.length"
       >
         <template v-slot:top>
@@ -46,16 +46,16 @@
                     <v-container>
                     <v-row>
                         <v-col cols="12" sm="6" md="4">
-                        <v-text-field v-model="editedItem.firstName" label="First Name"></v-text-field>
+                        <v-text-field v-model="editedItem.first_name" label="First Name"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
-                        <v-text-field v-model="editedItem.lastName" label="Last Name"></v-text-field>
+                        <v-text-field v-model="editedItem.last_name" label="Last Name"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
                         <v-text-field v-model="editedItem.email" label="Email"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
-                        <v-text-field v-model="editedItem.phoneNumber" label="Phone Number"></v-text-field>
+                        <v-text-field v-model="editedItem.phone_number" label="Phone Number"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
                         <v-text-field v-model="editedItem.location" label="Location"></v-text-field>
@@ -64,7 +64,7 @@
                         <v-text-field v-model="editedItem.status" label="Status"></v-text-field>
                         </v-col>
                         <v-col cols="12" sm="6" md="4">
-                        <v-text-field v-model="editedItem.current_client" label="Company"></v-text-field>
+                        <v-text-field v-model="editedItem.company" label="Company"></v-text-field>
                         </v-col>
                     </v-row>
                     </v-container>
@@ -91,8 +91,8 @@
                       <v-row>
                         <svg xmlns="http://www.w3.org/2000/svg" height="5rem" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/></svg>
                         <v-col>
-                      <p>First Name: {{ clickedItem.firstName }}</p>
-                      <p>Last Name: {{ clickedItem.lastName }}</p>
+                      <p>First Name: {{ clickedItem.first_name }}</p>
+                      <p>Last Name: {{ clickedItem.last_name }}</p>
                       <p>Foreign Name: {{ clickedItem.foreignName }}</p>
                     </v-col>
                 </v-row>
@@ -101,7 +101,7 @@
               <v-col>
                   <p> Applied For: {{ clickedItem.position }}</p>
                   <p>Desired salary: 500</p>
-                  <p>Current Client: {{ clickedItem.current_client }}</p>
+                  <p>Current Client: {{ clickedItem.company }}</p>
               </v-col>
               <v-col>
                   <v-row>
@@ -114,7 +114,7 @@
                   </v-row>
                   <v-row>
                     <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z"/></svg>
-                    <p class="pl-2"> {{ clickedItem.phoneNumber }}</p>
+                    <p class="pl-2"> {{ clickedItem.phone_number }}</p>
                   </v-row>
               </v-col>
              </v-row>
@@ -171,8 +171,10 @@
    </template>
    
    <script>
-   import candidateData from "../assets/tables/candidateTable";
-   
+  //  import candidateData from "../assets/tables/candidateTable";
+   import axios from "axios";
+
+
    export default {
     data() {
       return {
@@ -188,61 +190,95 @@
             title: "First Name",
             align: "start",
             sortable: true,
-            key: "firstName",
+            key: "first_name",
             },
-          { title: "Last Name",text: 'Last Name', key: "lastName", value: 'lastName' },
+          { title: "Last Name",text: 'Last Name', key: "last_name", value: 'last_name' },
           { title: "Email",text: 'Email',  key: "email", value: 'email' },
-          { title: "Phone Number",text: 'Phone Number',  key: "phoneNumber",value: 'phoneNumber' },
+          { title: "Phone Number",text: 'Phone Number',  key: "phone_number",value: 'phone_number' },
           { title: "Location",text: 'Location', key: "location", value: 'location' },
           { title: "Status",text: 'Status',  key: "status", value: 'status' },
-          { title: "Company",text: 'Company',  key: "current_client", value: 'current_client' },
+          { title: "Company",text: 'Company',  key: "company", value: 'company' },
           { title: "Action",text: 'Actions',  key: "actions", value: 'actions', sortable: false },
         ],
         dialog: false,
         editedIndex: -1,
         editedItem: {
-          firstName: "",
-          lastName: "",
+          first_name: "",
+          last_name: "",
           email: "",
-          phoneNumber: "",
+          phone_number: "",
           location: "",
           status: "",
-          current_client: "",
+          company: "",
         },
         defaultItem: {
-          firstName: "",
-          lastName: "",
+          first_name: "",
+          last_name: "",
           email: "",
-          phoneNumber: "",
+          phone_number: "",
           location: "",
           status: "",
-          current_client: "",
+          company: "",
         },
       };
     },
     computed: {
-      filteredCandidates() {
-       if (!this.search){
-           return this.candidates.filter(candidate => candidate.current_client === this.$route.params.companyName);
-       }
-       const query = this.search.toLowerCase();
-    return this.candidates.filter(candidate => {
+  filteredCandidates() {
+    console.log('Search:', this.search);
+    console.log('Company Name:', this.$route.params.companyName);
+
+    if (!this.search && this.$route.params.companyName !== undefined && this.$route.params.companyName !== '') {
+      const filtered = this.candidates.filter(candidate => candidate.company === this.$route.params.companyName);
+      console.log('Filtered by Company:', filtered);
+      return filtered;
+    } else if (!this.search) {
+      console.log('All Candidates:', this.candidates);
+      return this.candidates; // Return all candidates when no search and no company filter is provided
+    }
+
+    const query = this.search.toLowerCase();
+    const filteredBySearch = this.candidates.filter(candidate => {
+      // Filter based on search query
       return (
-        candidate.firstName.toLowerCase().includes(query) ||
-        candidate.lastName.toLowerCase().includes(query) ||
+        candidate.first_name.toLowerCase().includes(query) ||
+        candidate.last_name.toLowerCase().includes(query) ||
         candidate.email.toLowerCase().includes(query) ||
-        candidate.phoneNumber.toLowerCase().includes(query) ||
+        candidate.phone_number.toLowerCase().includes(query) ||
         candidate.location.toLowerCase().includes(query) ||
         candidate.status.toLowerCase().includes(query) ||
-        candidate.current_client.toLowerCase().includes(query)
+        candidate.company.toLowerCase().includes(query)
       );
     });
-      },
-    },
-    created() {
+    console.log('Filtered by Search:', filteredBySearch);
+    return filteredBySearch;
+  },
+},
+
+
+   async created() {
       // Replace this with the imported data
-      this.candidates = candidateData;
-   
+      // this.candidates = candidateData;
+      // async created() {
+        const token = localStorage.getItem('token');
+
+if (!token) {
+  this.$router.push('/login');
+  return; // Exit early if there's no token
+}
+
+const config = {
+  headers: {
+    'Authorization': `Bearer ${token}`
+  }
+};
+
+try {
+  const response = await axios.get('http://localhost:8010/api/candidates/', config);
+  this.candidates = response.data;
+} catch (error) {
+  console.error(error);
+  this.showErrorToUser('Failed to fetch candidates. Please try again.'); // Show error to the user
+}
       // Simulating a delay for data loading
       setTimeout(() => {
         this.loading = false;
@@ -284,14 +320,30 @@
       },
 
       save() {
-        if (this.editedIndex > -1) {
-          Object.assign(this.candidates[this.editedIndex], this.editedItem);
-        } else {
-          this.candidates.push(this.editedItem);
-        }
-        this.close();
-      },
+    // Populate the company field with the route parameter value
+    this.editedItem.company = this.$route.params.companyName;
+
+    if (this.editedIndex > -1) {
+      Object.assign(this.candidates[this.editedIndex], this.editedItem);
+    } else {
+      this.candidates.push(this.editedItem);
+    }
+    this.close();
+  },
     },
    };
    </script>
+   
+
+
+
+
+
+
+
+
+
+
+
+
    

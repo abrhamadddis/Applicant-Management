@@ -9,10 +9,10 @@
       >
       <v-spacer />
 
-      <MoreBtn
+      <!-- <MoreBtn
         size="x-small"
         class="me-n3 mt-n4"
-      />
+      /> -->
     </v-card-text>
 
     <v-card-text>
@@ -22,7 +22,7 @@
       <h5 class="text-h5 text-no-wrap mb-3">
         {{ stats }}
       </h5>
-      <span
+      <!-- <span
         :class="isPositive ? 'text-success' : 'text-error'"
         class="d-flex align-center gap-1 text-sm"
       >
@@ -31,7 +31,7 @@
           :icon="isPositive ? 'bx-up-arrow-alt' : 'bx-down-arrow-alt'"
         />
         {{ isPositive ? Math.abs(change) : change }}%
-      </span>
+      </span> -->
     </v-card-text>
   </v-card>
 </div>
@@ -55,10 +55,10 @@ export default {
       type: String,
       required: true
     },
-    change: {
-      type: Number,
-      required: true
-    }
+    // change: {
+    //   type: Number,
+    //   required: true
+    // }
   },
   computed: {
     isPositive() {
