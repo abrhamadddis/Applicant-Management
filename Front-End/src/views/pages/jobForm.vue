@@ -17,7 +17,7 @@
       </v-col>
       <v-col cols="12" md="6">
         <v-text-field
-          v-model="editedItem.current_client"
+          v-model="editedItem.company"
           variant="underlined"
           label="Company"
         ></v-text-field>
@@ -116,7 +116,7 @@
  
  <script>
  import data from '../../assets/tables/jobTable.js';
- import current_client from '../../assets/tables/companyTable';
+ import company from '../../assets/tables/companyTable';
  import axios from 'axios'
  export default {
 
@@ -147,21 +147,11 @@
          });
      }
    },
-   deleteJobData() {
-     axios.delete(`http://localhost:8010/api/jobs/${this.editedItem.id}`)
-       .then(response => {
-         console.log('Job deleted:', response.data);
-         this.$emit('job-deleted');
-       })
-       .catch(error => {
-         console.log('Error deleting job:', error);
-       });
-   },
  },
   data() {
     return {
       job: data[0],
-      companies: current_client,
+      companies: company,
       requirements: [],
       // companies: data.company,
       // requirements: data.requirement,

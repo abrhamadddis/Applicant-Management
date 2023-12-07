@@ -2,7 +2,7 @@
     <div class="shadow-lg  p-6">
 
       <p class="text-black-500 px-2 py-2 text-xl">Stages</p>
-      <div v-for="(statusCount, status) in statusCounts" :key="status">
+      <div v-for="(statusCount, ) in statusCounts" :key="status">
         <div class="flex items-center p-2 m-2 rounded-md ">
           <div class="flex  items-center " style="width:24vw">
                         <v-icon

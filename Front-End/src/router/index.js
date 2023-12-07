@@ -20,7 +20,7 @@ const routes = [
       {
         path: '/candidates/:companyName', // Dynamic route for company name
         name: 'Candidates',
-        component: () => import('@/views/CandidatesPage.vue'),
+        component: () => import('@/views/candidatePage.vue'),
       },
       {
         path: '/jobs',
