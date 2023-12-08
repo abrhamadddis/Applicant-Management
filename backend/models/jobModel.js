@@ -11,9 +11,11 @@ const jobSchema = mongoose.Schema({
   experience: { type: String },
   job_summary: { type: String },
   postedAt: { type: Date, default: Date.now },
+  job_end_date: { type: Date, default: Date.now },
   responsibilities: { type: String },
-  requirements: { type: String },
+  skills: { type: String, enum: ['HTML', 'CSS', 'JavaScript', 'ReactJS'] },
   is_active: { type: Boolean, default: true },
+  is_archive: { type: Boolean, default: false },
   created_by: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   updated_by: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 }, {
