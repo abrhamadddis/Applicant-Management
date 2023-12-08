@@ -1,17 +1,20 @@
 const mongoose = require('mongoose');
 
 const candidateSchema = mongoose.Schema({
-  user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  first_name: { type: String, required: true },
-  last_name: { type: String, required: true },
-  email: { type: String, required: true },
+  user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  first_name: { type: String },
+  last_name: { type: String },
+  email: { type: String },
   phone_number: { type: Number },
   location: { type: String },
   source: { type: String, enum: ['Linkedin', 'Telegram_bot', 'Tiktok', 'Dereja', 'University'] },
-  status: { type: String, enum: ['Rejected', 'Interviewed', 'Pending', 'Offered'] },
+  status: { type: String, enum: ['Rejected', 'Interviewed', 'Pending', 'Offered', 'Hired'] },
   status_updated_at:  { type: Date, default: Date.now },
   reason: { type: String },
-  CV: { type: String, default: '' },
+  CV: { 
+    data: Buffer,
+    contentType: String
+  },
   overall_feedback: { type: String },
   foreign_name: { type: String },
   position: { type: String },
