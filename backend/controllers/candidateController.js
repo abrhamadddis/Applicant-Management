@@ -48,9 +48,9 @@ const createCandidate = asyncHandler(async (req, res) => {
 });
 
 const updateCandidate = asyncHandler(async (req, res) => {
-  if (req.user.role !== 'admin') {
-    return res.status(403).json({ message: 'Permission denied' });
-  }
+  // if (req.user.role !== 'admin') {
+  //   return res.status(403).json({ message: 'Permission denied' });
+  // }
   try {
     const { _id: updatedBy } = req.user;
     req.body.updated_by = updatedBy;
@@ -67,9 +67,9 @@ const updateCandidate = asyncHandler(async (req, res) => {
 });
 
 const deleteCandidate = asyncHandler(async (req, res) => {
-  if (req.user.role !== 'admin') {
-    return res.status(403).json({ message: 'Permission denied' });
-  }
+  // if (req.user.role !== 'admin') {
+  //   return res.status(403).json({ message: 'Permission denied' });
+  // }
 
   const candidateIdToDelete = req.params.id;
 
@@ -138,12 +138,53 @@ const getCandidate = asyncHandler(async (req, res) => {
 
 const getAllCandidates = asyncHandler(async (req, res) => {
   try {
-    const candidates = await Candidate.find();
+    const { page = 1, limit = 10, position, company, location, sort } = req.query;
+    const skip = (page - 1) * limit;
+
+    let query = {};
+
+    if (position) {
+      query.position = { $regex: new RegExp(position, 'i') };
+    }
+
+    if (company) {
+    query.company = { $regex: new RegExp(company, 'i') };
+    }
+
+    if (location) {
+    query.location = { $regex: new RegExp(location, 'i') };
+    }
+
+    const sortOptions = {};
+
+    if (sort) {
+      switch (sort) {
+        case 'position':
+          sortOptions.position = 1;
+          break;
+        case 'company':
+          sortOptions.company = 1;
+          break;
+        case 'location':
+          sortOptions.location = 1;
+          break;
+        case 'createdAt':
+          sortOptions.createdAt = -1;
+          break;
+        default:
+          sortOptions.createdAt = -1;
+          break;
+      }
+    }
+
+    const candidates = await Candidate.find(query)
+      .skip(skip)
+      .limit(Number(limit))
+      .sort(sortOptions);
 
     if (!candidates || candidates.length === 0) {
       return res.status(404).json({ message: 'No candidates found' });
     }
-
     // const mappedCandidates = candidates.map((candidate) => ({
     //   user_id: candidate.user_id,
     //   first_name: candidate.first_name,
