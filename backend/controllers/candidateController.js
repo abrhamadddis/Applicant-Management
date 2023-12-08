@@ -1,24 +1,46 @@
 const asyncHandler = require('express-async-handler');
 const Candidate = require('../models/candidateModel');
 
-const createCandidate = asyncHandler(async (req, res) => {
-  if (req.user.role !== 'admin') {
-    return res.status(403).json({ message: 'Permission denied' });
-  }
 
+const multer = require('multer');
+
+const storage = multer.memoryStorage();
+
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 1024 * 1024 * 5 },
+}).single('CV');
+
+const createCandidate = asyncHandler(async (req, res) => {
   const { _id: createdBy } = req.user;
   const candidateData = { ...req.body, user_id: createdBy, created_by: createdBy };
 
   try {
-    const existingCandidate = await Candidate.findOne({email: req.body.email});
-    if (existingCandidate) {
-      return res.status(400).json({ message: 'Candidate with this email already exists' });
-    }
+    upload(req, res, async (err) => {
+      if (err) {
+        return res.status(400).json({ error: 'Error uploading file' });
+      }
 
-    const candidate = new Candidate(candidateData);
-    await candidate.save();
+      if (!req.file) {
+        return res.status(400).json({ error: 'Please upload a file' });
+      }
 
-    res.status(201).json({ message: 'Candidate created successfully' });
+      const existingCandidate = await Candidate.findOne({ email: req.body.email });
+      if (existingCandidate) {
+        return res.status(400).json({ message: 'Candidate with this email already exists' });
+      }
+
+      const candidate = new Candidate({
+        ...candidateData,
+        CV: {
+          data: req.file.buffer,
+          contentType: req.file.mimetype
+        }
+      });
+
+      await candidate.save();
+      res.status(201).json({ message: 'Candidate created successfully' });
+    });
   } catch (error) {
     console.error('Error in createCandidate:', error);
     res.status(500).json({ message: 'Internal Server Error' });
