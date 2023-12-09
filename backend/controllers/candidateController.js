@@ -1,51 +1,67 @@
 const asyncHandler = require('express-async-handler');
 const Candidate = require('../models/candidateModel');
 
-
-const multer = require('multer');
-
-const storage = multer.memoryStorage();
-
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 1024 * 1024 * 5 },
-}).single('CV');
-
 const createCandidate = asyncHandler(async (req, res) => {
   const { _id: createdBy } = req.user;
-  const candidateData = { ...req.body, user_id: createdBy, created_by: createdBy };
+
+  const {
+    first_name,
+    last_name,
+    phone_number,
+    location,
+    source,
+    status,
+    reason,
+    overall_feedback,
+    foreign_name,
+    position,
+    current_client,
+  } = req.body;
+
+  const email = req.body.email;
 
   try {
-    upload(req, res, async (err) => {
-      if (err) {
-        return res.status(400).json({ error: 'Error uploading file' });
-      }
+    if (!email) {
+      return res.status(400).json({ message: 'Email is required' });
+    }
 
-      if (!req.file) {
-        return res.status(400).json({ error: 'Please upload a file' });
-      }
+    const existingCandidate = await Candidate.findOne({ email });
+    if (existingCandidate) {
+      return res.status(400).json({ message: `Candidate with email ${email} already exists` });
+    }
 
-      const existingCandidate = await Candidate.findOne({ email: req.body.email });
-      if (existingCandidate) {
-        return res.status(400).json({ message: 'Candidate with this email already exists' });
-      }
-
-      const candidate = new Candidate({
-        ...candidateData,
-        CV: {
-          data: req.file.buffer,
-          contentType: req.file.mimetype
-        }
-      });
-
-      await candidate.save();
-      res.status(201).json({ message: 'Candidate created successfully' });
+    const candidate = new Candidate({
+      user_id: createdBy,
+      created_by: createdBy,
+      first_name,
+      last_name,
+      email,
+      phone_number,
+      location,
+      source,
+      status,
+      reason,
+      overall_feedback,
+      foreign_name,
+      position,
+      current_client,
     });
+
+    if (req.file) {
+      candidate.CV = {
+        data: req.file.buffer,
+        contentType: req.file.mimetype,
+      };
+    }
+
+    await candidate.save();
+    res.status(201).json({ message: 'Candidate created successfully', data: candidate });
   } catch (error) {
     console.error('Error in createCandidate:', error);
-    res.status(500).json({ message: 'Internal Server Error' });
+    res.status(500).json({ message: `Internal Server Error: ${error.message}` });
   }
 });
+
 
 const updateCandidate = asyncHandler(async (req, res) => {
   // if (req.user.role !== 'admin') {
