@@ -9,6 +9,10 @@ connectDB();
 
 const app = express();
 
+const multer = require('multer');
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage }).single('CV');
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 const cors = require('cors');
@@ -18,6 +22,8 @@ app.use(cors({
   methods: 'GET,POST,PUT,DELETE',
   credentials: true,
 }));
+
+app.use(upload);
 
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/users', require('./routes/userRoutes'));
