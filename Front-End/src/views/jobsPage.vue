@@ -294,7 +294,7 @@
       <v-icon size="small" class="px-2" color="black lighten-3" @click="deleteItem(item)"> mdi-delete </v-icon>
      </template>
      <template v-slot:no-data>
-       <v-btn color="primary" @click="initialize"> Reset </v-btn>
+       <v-btn color="primary" @click="resetSearch"> Reset </v-btn>
      </template>
    </v-data-table>
   </div>
@@ -458,16 +458,44 @@ this.infoDialog = true;
      this.editedItem = Object.assign({}, item);
      this.dialogDelete = true;
    },
-   deleteItemConfirm() {
-     axios.delete(`http://localhost:8010/api/jobs/${this.editedItem._id}`)
-       .then(() => {
-         this.jobs.splice(this.editedIndex, 1);
-         this.closeDelete();
-       })
-       .catch(error => {
-         console.error(error);
-       });
-   },
+    //  deleteItemConfirm() {
+    //    axios.delete(`http://localhost:8010/api/jobs/${this.editedItem._id}`)
+    //      .then(() => {
+    //        this.jobs.splice(this.editedIndex, 1);
+    //        this.closeDelete();
+    //      })
+    //      .catch(error => {
+    //        console.error(error);
+    //      });
+    //  },
+   async deleteItemConfirm() {
+  try {
+    const token = localStorage.getItem('token');
+    const apiUrl = `http://localhost:8010/api/jobs/${this.editedItem._id}`;
+
+    // Check if token exists in local storage
+    if (token) {
+      // Make the DELETE request with the token in the Authorization header
+      await axios.delete(apiUrl, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // Remove the deleted item from the local candidates array
+      this.jobs.splice(this.editedIndex, 1);
+      this.closeDelete();
+      console.log('Item deleted successfully');
+    } else {
+      // Handle the case where the token is missing or invalid
+      console.error('No token available.');
+      // You might want to handle this scenario, e.g., redirect to login or show an error message.
+    }
+  } catch (error) {
+    console.error('Error deleting item:', error);
+    // Handle error scenarios, show a message, etc.
+  }
+},
    close() {
      this.dialog = false;
      this.$nextTick(() => {
@@ -607,6 +635,9 @@ if (typeof company === 'string') {
   return '';
 }
 },
+resetSearch() {
+      this.search = '';
+    },
  },
 };
 </script>

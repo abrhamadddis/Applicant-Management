@@ -252,7 +252,10 @@
       <v-btn color="primary" @click="initialize"> Reset </v-btn>
     </template>
   </v-data-table>
-  <div v-else-if="!loading">No candidates found for {{ $route.params.companyName }}</div>
+  <div v-else-if="!loading">No candidates found for {{ $route.params.companyName }}
+    <v-btn color="primary" @click="resetSearch"> Reset </v-btn>
+
+  </div>
       <div v-else>Loading candidates...</div>
     </div>
 </template>
@@ -386,7 +389,10 @@ export default {
   },
 
   methods: {
-
+    resetSearch() {
+      this.search = '';
+      console.log('Search:', this.search);
+    },
     async fetchCandidates() {
       try {
         const response = await getCandidates()
@@ -409,10 +415,33 @@ export default {
         this.dialogDelete = true
       },
 
-    deleteItemConfirm() {
+async deleteItemConfirm() {
+  try {
+    const token = localStorage.getItem('token');
+    const apiUrl = `http://localhost:8010/api/candidates/${this.editedItem._id}`;
+
+    // Check if token exists in local storage
+    if (token) {
+      // Make the DELETE request with the token in the Authorization header
+      await axios.delete(apiUrl, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // Remove the deleted item from the local candidates array
       this.candidates.splice(this.editedIndex, 1);
       this.closeDelete();
-    },
+    } else {
+      // Handle the case where the token is missing or invalid
+      console.error('No token available.');
+      // You might want to handle this scenario, e.g., redirect to login or show an error message.
+    }
+  } catch (error) {
+    console.error('Error deleting item:', error);
+    // Handle error scenarios, show a message, etc.
+  }
+},
 
     close() {
       this.dialog = false;
