@@ -1,5 +1,5 @@
 const asyncHandler = require("express-async-handler");
-
+const cron = require('node-cron');
 const Job = require("../models/jobModel");
 
 const getJobs = asyncHandler(async (req, res) => {
@@ -163,6 +163,27 @@ const updateJob = asyncHandler(async (req, res) => {
   }
 });
 
+const updateJobsStatus = async () => {
+  try {
+    const today = new Date();
+
+    const expiredJobs = await Job.find({ job_end_date: { $lt: today }, is_active: true });
+
+    if (expiredJobs.length > 0) {
+      await Job.updateMany(
+        { _id: { $in: expiredJobs.map((job) => job._id) } },
+        { $set: { is_active: false } }
+      );
+      console.log('Updated jobs status');
+    }
+  } catch (error) {
+    console.error('Error updating jobs:', error);
+  }
+};
+
+cron.schedule('0 0 * * *', updateJobsStatus);
+
+
 const deleteJob = asyncHandler(async (req, res) => {
   try {
     const job = await Job.findById(req.params.id);
@@ -171,8 +192,10 @@ const deleteJob = asyncHandler(async (req, res) => {
       res.status(400);
       throw new Error("Job not Found");
     }
-    await Job.findByIdAndRemove(req.params.id);
-    res.status(200).json({ id: req.params.id });
+    // await Job.findByIdAndRemove(req.params.id);
+
+    job.is_archive = true;
+    res.status(200).json({id: req.params.id});
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
