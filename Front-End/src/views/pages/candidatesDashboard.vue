@@ -1,5 +1,6 @@
 <template>
     <v-data-table-virtual
+    class="custom-table"
       :headers="headers"
       :items="virtualBoats"
       height="400"
@@ -68,3 +69,16 @@
   };
   </script>
   
+<style>
+.custom-table {
+ /* Hide the scroll */
+ overflow: hidden;
+ /* Add a thin faded orange scroll */
+ scrollbar-color: #FFA500 transparent; /* Change color here */
+ scrollbar-width: thin;
+
+ /* Add a larger shadow effect at the bottom */
+ box-shadow: inset 0px -20px 20px -20px rgba(0, 0, 0, 0.5); /* Adjust shadow values as needed */
+}
+
+</style>

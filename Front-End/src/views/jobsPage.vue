@@ -6,6 +6,8 @@
     class="my-5 mx-auto bg-white shadow-lg rounded-lg"
      :headers="headers"
      :items="filteredJobs"
+     :loading="isLoading"
+    loading-text="Loading... Please wait"
      :sort-by="[{ key: 'user_id', order: 'asc' }]"
    >
      <template v-slot:top>
@@ -162,6 +164,7 @@
           Job End Date:
         </div>
         <Datepicker v-model="picked" class="custom-datepicker" ></Datepicker>
+       
         <!-- <v-date-picker v-model="picked" class="custom-datepicker"></v-date-picker> -->
         </v-col>  
 </v-row>
@@ -201,20 +204,44 @@
     <template v-slot:activator="{ props }">
       <!-- Activator slot content here -->
     </template>
-    <v-card class="job-profile-card">
-      <v-card-title class="d-flex justify-space-between align-center">
-        <span class="text-h5">Job Profile</span>
-        <v-btn icon @click="infoDialog = false">
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
+
+    <v-card class="job-profile-card ">
+      <v-card-title class="d-flex bg-grey-lighten-3 justify-space-between align-center">
+        <v-img
+          height="200"
+          src="https://talent.mmcytech.com/wp-content/uploads/2021/09/MMCY-Tech-Job_section-1.png"
+          cover
+          class="text-white"
+        >
+          <v-toolbar
+            color="rgba(0, 0, 0, 0)"
+            theme="dark"
+          >
+            <template v-slot:prepend>
+              <v-btn icon="$menu"></v-btn>
+            </template>
+
+            <v-toolbar-title class="text-h6">
+              Job Profile
+            </v-toolbar-title>
+
+            <template v-slot:append>
+              <v-btn icon @click="infoDialog = false">
+                <v-icon>mdi-close</v-icon>
+              </v-btn>
+              <v-btn icon="mdi-dots-vertical"></v-btn>
+            </template>
+          </v-toolbar>
+        </v-img>
+        <!-- <span class="text-h5">Job Profile</span> -->
       </v-card-title>
       <v-card-text>
         <v-row>
           <!-- First Column - Company Details -->
-          <v-col cols="6">
-            <v-card class="company-details">
-              <v-avatar size="150" color="#FF694B">
-                <svg xmlns="http://www.w3.org/2000/svg" height="5rem" viewBox="0 0 448 512">
+          <v-col cols="4">
+            <v-card class="company-details mt-n16 bg-transparent rounded-lg">
+          <v-avatar size="150" class="floating-avatar " color="#FF694B">
+                 <svg xmlns="http://www.w3.org/2000/svg" height="5rem" viewBox="0 0 448 512">
                   <path fill="#FF694B" d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
                 </svg>
               </v-avatar>
@@ -228,7 +255,7 @@
           </v-col>
           
           <!-- Second Column - Job Details -->
-          <v-col cols="6">
+          <v-col cols="8">
             <v-card class="job-details">
               <v-card-text>
                 <span class="font-weight-bold text-primary text-lg text-center" style="font-size: 24px; font-family: 'Fancy Card Text', cursive;">
@@ -244,17 +271,19 @@
 </p>
 
                 <span color="#FF694B">Responsibilities</span>
-                <p>{{ clickedItem.responsibilities }}</p>
+                <p class="mx-10">{{ clickedItem.responsibilities }}</p>
 
                 <span color="#FF694B">Skills</span>
                 <v-chip-group>
-                  <v-chip v-for="(skill, index) in clickedItem.skills" :key="index">{{ skill }}</v-chip>
+                  <v-chip v-for="(skill, index) in clickedItem.skills" :key="index"  :color="colorMap[skill]"
+     text-color="white">{{ skill }}</v-chip>
                 </v-chip-group>
+                
 
-                <v-chip color="#FF694B" class="chip">Job End Date</v-chip>
-                <v-card class="job-end-date">
-                  <v-card-text>{{ clickedItem.job_end_date }}</v-card-text>
-                </v-card>
+                <!-- <v-chip color="#FF694B" class="chip">Job End Date</v-chip> -->
+ <div class="job-end-date">
+      <v-card-text>Job End Date: {{ formatDate(picked) }}</v-card-text>
+    </div>                
               </v-card-text>
             </v-card>
           </v-col>
@@ -327,7 +356,14 @@ onMounted(() => {
   import {store} from '../store/color';
   import axios from 'axios';
   import { ref, onMounted } from 'vue';
-
+  const formatDate = (date) => {
+  const options = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  };
+  return date ? date.toLocaleDateString('en-US', options) : '';
+};
   export default {
   components: {
     //  jobForm
@@ -335,6 +371,7 @@ onMounted(() => {
    },
    data: () => ({
     search: '',    
+    isLoading: true, 
     editedItem: {},
     dialog: false,
     dialogDelete: false,
@@ -412,6 +449,7 @@ onMounted(() => {
       );
     });
   },
+
    colorMap() {
  const colorMap = store.state.colorMap;
  this.jobs.forEach(job => {
@@ -447,15 +485,19 @@ onMounted(() => {
    this.fetchJobs();
  },
  methods: {
+  formatDate,
+  // randomColor,
    fetchJobs() {
      axios.get('http://localhost:8010/api/jobs/')
        .then(response => {
          this.jobs = response.data;
-         console.log(this.jobs)
+         this.isLoading = false;
+         console.log(this.isLoading);
        })
        .catch(error => {
          console.error(error);
        });
+
    },
    showItemInfo(item) {
 this.clickedItem = item;
@@ -688,6 +730,8 @@ resetSearch() {
   padding: 1rem;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: none !important;
+
 }
 
 .company-info {
@@ -696,7 +740,9 @@ resetSearch() {
 
 .job-details {
   padding: 1rem;
-  box-shadow: none;
+  box-shadow: none !important;
+  border-left: 1px solid #eb0f0f; /* Change color and style as needed */
+
 }
 
 .chip {
@@ -721,6 +767,13 @@ resetSearch() {
   padding: 24px;
   text-align: center;
 }
+.floating-avatar {
+  position: relative;
+  /* Adjust as needed */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
 
 .delete-confirmation-modal .text-h5 {
   font-size: 18px;
@@ -730,6 +783,16 @@ resetSearch() {
 
 .delete-confirmation-modal .v-card-actions {
   padding-top: 24px;
+}
+
+.job-end-date {
+  background-color: #ff694b;
+  color: #fff;
+  border-radius: 8px;
+  text-align: center;
+  padding: 0.5rem;
+  margin-top: 1rem;
+  /* Add more styles as needed for better readability */
 }
 </style>
 
