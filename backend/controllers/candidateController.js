@@ -90,7 +90,7 @@ const getCandidate = asyncHandler(async (req, res) => {
       overall_feedback,
       foreign_name,
       position,
-      current_client,
+      company,
     } = candidate;
 
     res.status(200).json({
@@ -107,7 +107,7 @@ const getCandidate = asyncHandler(async (req, res) => {
       overall_feedback,
       foreign_name,
       position,
-      current_client,
+      company,
     });
   } catch (error) {
     res.status(500).json({ message: 'Internal Server Error' });

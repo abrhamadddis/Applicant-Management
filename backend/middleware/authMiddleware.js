@@ -20,7 +20,7 @@ const authMiddleware = asyncHandler(async (req, res, next) => {
     } catch (error) {
       console.log(error)
       res.status(401)
-      throw new Error('Not authorized')
+      throw new Error('Not authorized auth middleware')
     }
   }
 
@@ -31,15 +31,15 @@ const authMiddleware = asyncHandler(async (req, res, next) => {
 })
 
 const adminMiddleware = (req, res, next) => {
-  if (req.user.role !== 'superadmin' && req.user.role !== 'admin') {
-    return res.status(403).json({ message: 'Permission deniedd' });
+  if (req.user.role !== 'admin') {
+    return res.status(403).json({ message: 'Permission deniedd admin middleware' });
   }
   next();
 };
 
 const superAdminMiddleware = (req, res, next) => {
   if (req.user.role !== 'superadmin') {
-    return res.status(403).json({ message: 'Permission denied' });
+    return res.status(403).json({ message: 'Permission denied  superadminmiddleware' });
   }
   next();
 };
