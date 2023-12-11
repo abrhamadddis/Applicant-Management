@@ -24,7 +24,7 @@
     computed: {
     // Assuming boats are sorted by 'year' property in descending order
     sortedCandidates() {
-      return this.boats.sort((a, b) => b.year - a.year);
+      return this.boats.sort((a, b) => a.year - b.year);
     },
   },
     computed: {
@@ -51,7 +51,7 @@
       const token = authStore.token; // Get the token from the auth store
   
       // Fetch data from the API when the component is mounted using the token
-      axios.get('http://localhost:8010/api/candidates', {
+      axios.get('http://localhost:8010/api/candidates?limit=50&sort=createdAt', {
         headers: {
           Authorization: `Bearer ${token}`, // Set Authorization header with the token
         },

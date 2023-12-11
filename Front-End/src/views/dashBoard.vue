@@ -2,6 +2,7 @@
 import statusBoard from '@/views/pages/statusBoard.vue'
 import CardStatisticsVertical from '../@core/components/cards/CardStatisticsVertical.vue'
 import CalendarGraph from '@/views/pages/calendarGraph.vue'
+import CalendarView from '@/views/pages/calendarView.vue'
 // 👉 Images
 import jobsicon from '../assets/jobs.png'
 import appliedCandidates from '../assets/appliedCandidates.png'
@@ -194,6 +195,7 @@ md="12"
 </VCol>
 </VRow>
 </VCol>
+
   <VCol
     cols="3"
     sm="3">
@@ -205,6 +207,18 @@ md="12"
       </div>
       </div>
       <candidatesDashboard/>
+  </VCol>
+  <VCol
+    cols="12"
+    sm="12">
+    <div class="px-6 py-2">
+      <div class="font-bold text-l mb-2 text-gray-800 text-center">Latest Candidates
+      <button @click.prevent="goToCandidatePage" class="text-primary  p-2 transition duration-300 transform hover:scale-110 ">
+        view all
+      </button>
+      </div>
+      </div>
+      <CalendarView ref="calendar" />
   </VCol>
  </VRow>
   

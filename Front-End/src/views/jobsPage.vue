@@ -44,13 +44,13 @@
 
                 <v-container>
     <v-row>
-      <v-col cols="12" md="6">
+      <!-- <v-col cols="12" md="6">
         <v-text-field
           v-model="editedItem.user_id"
           variant="underlined"
           label="User ID"
         ></v-text-field>
-      </v-col>
+      </v-col> -->
       <v-col cols="12" md="6">
         <v-text-field
           v-model="editedItem.title"
@@ -126,17 +126,17 @@
       
       <!-- <v-col cols="12">
         <v-combobox
-          v-model="editedItem.requirements"
-          :items="requirements"
-          label="Requirements"
+          v-model="editedItem.skills"
+          :items="skills"
+          label="skills"
           multiple
           chips
         ></v-combobox>
       </v-col> -->
       <v-combobox
-        v-model="editedItem.requirements"
-        :items="requirements"
-        label="Requirements"
+        v-model="editedItem.skills"
+        :items="skills"
+        label="skills"
         variant="underlined"
         multiple
         chips
@@ -276,15 +276,15 @@
    <!-- {{ getCompanyName(item.company) }} -->
  </div>
  </template>
-     <template v-slot:item.requirements="{ item }">
+     <template v-slot:item.skills="{ item }">
  <div>
    <v-chip
-     v-for="(requirement, index) in item.requirements"
+     v-for="(skill, index) in item.skills"
      :key="index"
-     :color="colorMap[requirement]"
+     :color="colorMap[skill]"
      text-color="white"
    >
-     {{ requirement }}
+     {{ skill }}
    </v-chip>
  </div>
  </template>
@@ -304,6 +304,21 @@
  import Datepicker from 'vue3-datepicker'
  import { ref } from 'vue'
 
+ const skills = ref([]);
+
+const fetchSkills = async () => {
+  try {
+    const response = await axios.get('http://localhost:8010/api/jobs/skills');
+    skills.value = response.data.skills; // Assuming the response contains the skills array
+    console.log(skills.value);
+  } catch (error) {
+    console.error('Error fetching skills:', error);
+  }
+};
+
+onMounted(() => {
+  fetchSkills();
+});
  const picked = ref(new Date())
  </script> 
   <script>
@@ -311,7 +326,8 @@
   // import jobForm from './pages/jobForm.vue';
   import {store} from '../store/color';
   import axios from 'axios';
-  
+  import { ref, onMounted } from 'vue';
+
   export default {
   components: {
     //  jobForm
@@ -332,7 +348,7 @@
        { title: "Job Type", key: "job_type" },
        { title: "Experience", key: "experience" },
        { title: "Responsibilities", key: "responsibilities" },
-       { title: "Skills", key: "requirements" },
+       { title: "Skills", key: "skills" },
        { title: "Actions", key: "actions", sortable: false },
      ],
      jobs: [],
@@ -348,7 +364,7 @@
        experience: "",
        job_summary: "",
        responsibilities: "",
-       requirements: [],
+       skills: [],
        is_active: false,
        created_by: "",
        updated_by: "",
@@ -366,7 +382,7 @@
        experience: "",
        job_summary: "",
        responsibilities: "",
-       requirements: [],
+       skills: [],
        is_active: false,
        created_by: "",
        updated_by: "",
@@ -386,26 +402,23 @@
     const query = this.search.toLowerCase();
     return this.jobs.filter(job => {
       return (
-        // job.title.toLowerCase().includes(query) ||
-        job.company.toLowerCase().includes(query) ||
-        job.location.toLowerCase().includes(query) ||
-        job.job_type.toLowerCase().includes(query) ||
-        job.experience.toLowerCase().includes(query) ||
-        // job.job_summary.toLowerCase().includes(query) ||
-        // job.responsibilities.toLowerCase().includes(query) ||
-        job.requirements.some(requirement =>
-          requirement.toLowerCase().includes(query)
-        )
+        job.company && job.company.toLowerCase().includes(query) ||
+     job.location && job.location.toLowerCase().includes(query) ||
+     job.job_type && job.job_type.toLowerCase().includes(query) ||
+     job.experience && job.experience.toLowerCase().includes(query) ||
+     job.skills && job.skills.some(skill =>
+       skill && skill.toLowerCase().includes(query)
+     )
       );
     });
   },
    colorMap() {
  const colorMap = store.state.colorMap;
  this.jobs.forEach(job => {
-   if (Array.isArray(job.requirements)) {
-     job.requirements.forEach(requirement => {
-       if (!colorMap[requirement]) {
-         colorMap[requirement] = this.randomColor();
+   if (Array.isArray(job.skills)) {
+     job.skills.forEach(skill => {
+       if (!colorMap[skill]) {
+         colorMap[skill] = this.randomColor();
        }
      });
    }
@@ -416,8 +429,8 @@
     formTitle() {
       return this.editedIndex === -1 ? "New Job" : "Edit Job";
     },
- requirementsArray() {
-  return Object.values(this.requirements);
+ skillsArray() {
+  return Object.values(this.skills);
 },
 
   },

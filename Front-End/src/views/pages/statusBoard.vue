@@ -2,7 +2,7 @@
     <div class="shadow-lg  p-6">
 
       <p class="text-black-500 px-2 py-2 text-xl">Stages</p>
-      <div v-for="(statusCount, ) in statusCounts" :key="status">
+      <div v-for="(statusCount, status ) in statusCounts" :key="status">
         <div class="flex items-center p-2 m-2 rounded-md ">
           <div class="flex  items-center " style="width:24vw">
                         <v-icon
@@ -77,6 +77,7 @@
       // Assuming candidates have been fetched and the status is in 'status' property
       for (const item of this.candidates) {
         const status = item.status;
+        console.log(status);
         counts[status] = (counts[status] || 0) + 1;
       }
 
@@ -108,6 +109,7 @@
         return parseInt((statusCount * 100) / this.maximumCount);
       },
       getStatusLabel(status) {
+        
         switch (status) {
           case 'Rejected':
             return 'Rejected';
