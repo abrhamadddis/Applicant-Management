@@ -80,9 +80,16 @@
                   <v-col cols="12" sm="6" md="4">
                    <v-select
                    v-model=editedItem.company
-                    :items=companys
+                    :items="filteredCompanies"
                    label = "Current Client"
                    ></v-select>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-select
+                      v-model="editedItem.job_title"
+                      :items="jobTitles"
+                      label="Job Title"
+                    ></v-select>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field
@@ -161,6 +168,7 @@
 
               <v-col>
                   <p> Applied For: {{ clickedItem.position }}</p>
+                  <p> Job Title: {{ clickedItem.job_title }}</p>
                   <p>Desired salary: 500</p>
                   <p>Current Client: {{ clickedItem.company }}</p>
               </v-col>
@@ -270,6 +278,8 @@ export default {
     dialogDelete: false,
     infoDialog: false,
     clickedItem: null,
+    jobTitles: [],
+    selectedJobTitle: null,
     headers: [
       {
         title: "First Name",
@@ -283,6 +293,7 @@ export default {
       { title: "Company Name", key: "company" },
       { title: "Location", key: "location" },
       { title: "Status", key: "status" },
+      { title: "Job Title", key: "job_title" },
       { title: "Actions", key: "actions", sortable: false },
     ],
     candidates: [],
@@ -310,6 +321,7 @@ export default {
       phone_number: "",
       position:"",
       company:"",
+      job_title: "",
       foreign_name: "",
       location: "",
       cv:"",
@@ -341,12 +353,47 @@ export default {
     formTitle() {
       return this.editedIndex === -1 ? "New Candidate" : "Edit Candidate";
     },
+    filteredCompanies() {
+      const companyName = this.$route.params.companyName;
+    if (companyName) {
+      return this.companys.filter(company => {
+        return company.toLowerCase() === companyName.toLowerCase();
+      });
+    } else {
+      return this.companys; // Return all companies when there's no company name in the route
+    }
+  },
+  filteredJobTitles() {
+      const jobTitleParam = this.$route.params.jobTitle;
+      console.log("the tyjobtitle from filteredJobTitles", jobTitleParam);
+      if (jobTitleParam) {
+        return this.jobTitles.filter(job => {
+          return job.toLowerCase() === jobTitleParam.toLowerCase();
+        });
+      } else {
+        return jobTitleParam; // Return all job titles when there's no jobTitleParam
+        // console.log("the cxvzsdgjobtitle from filteredJobTitles", jobTitles);
+      }
+    },
+  // filteredJobTitles() {
+  //     const jobTitle = this.$route.params.jobTitle;
+  //     console.log('the jobtitle from filteredJobTitles',jobTitle);
+  //   if (jobTitle) {
+  //     return this.jobTitle.filter(job_title => {
+  //       return job_title.company === selectedCompany;
+  //     });
+  //   } else {
+  //     return this.jobTitle; // Return all companies when there's no company name in the route
+  //   }
+  // },
+    
     filteredCandidates() {
     console.log('Search:', this.search);
-    console.log('Company Name:', this.$route.params.companyName);
-
+    console.log('Company Name:', this.$route.params.companyName );
+console.log('Job Title:', this.$route.params.jobTitle);
     if (!this.search && this.$route.params.companyName !== undefined && this.$route.params.companyName !== '') {
-      const filtered = this.candidates.filter(candidate => candidate.company === this.$route.params.companyName);
+      // this.$route.params.jobtitle
+      const filtered = this.candidates.filter(candidate => candidate.company === this.$route.params.companyName && candidate.job_title === this.$route.params.jobTitle);
       console.log('Filtered by Company:', filtered);
       return filtered;
     } else if (!this.search) {
@@ -386,9 +433,22 @@ export default {
 
   created() {
     this.fetchCandidates();
+    console.log('job title ',this.$route.params.jobTitle);
+  },
+  mounted() {
+    this.fetchJobTitles();
   },
 
   methods: {
+    async fetchJobTitles() {
+      try {
+        const response = await axios.get('http://localhost:8010/api/jobs');
+        this.jobTitles = response.data.map(job => job.title);
+        console.log('Job Titles from fetchJobTitles method:', this.jobTitles);
+      } catch (error) {
+        console.error('Error fetching job titles:', error);
+      }
+    },
     resetSearch() {
       this.search = '';
       console.log('Search:', this.search);

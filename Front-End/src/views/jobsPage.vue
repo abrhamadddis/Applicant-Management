@@ -3,7 +3,7 @@
     <div class="bg-lightGrey px-10  py-5">
 
     <v-data-table 
-    class="my-5 mx-auto bg-white shadow-lg rounded-lg"
+    class="my-5 mx-auto bg-white hover:bg-gray-200 shadow-lg rounded-lg"
      :headers="headers"
      :items="filteredJobs"
      :loading="isLoading"
@@ -46,13 +46,6 @@
 
                 <v-container>
     <v-row>
-      <!-- <v-col cols="12" md="6">
-        <v-text-field
-          v-model="editedItem.user_id"
-          variant="underlined"
-          label="User ID"
-        ></v-text-field>
-      </v-col> -->
       <v-col cols="12" md="6">
         <v-text-field
           v-model="editedItem.title"
@@ -297,13 +290,10 @@
 
        </v-toolbar>
      </template>
-     <template v-slot:item.company="{ item }">
-      <router-link :to="{ name: 'Candidates', params: { companyName: item.company } }">
+     <template  v-slot:item.company="{ item }">
+      <router-link :to="{ name: 'Candidates', params: { companyName: item.company, jobTitle: item.title } }">
     {{ getCompanyName(item.company) }}
   </router-link>
-        <div>
-   <!-- {{ getCompanyName(item.company) }} -->
- </div>
  </template>
      <template v-slot:item.skills="{ item }">
  <div>
@@ -428,8 +418,8 @@ onMounted(() => {
    }),
   computed: {
     companyName() {
-      console.log(this.$route.params.company);
-      return this.$route.params.company;
+      console.log('jobs', this.$route.params.companyName);
+      return this.$route.params.companyName;
       
     },
   filteredJobs() {
@@ -488,7 +478,7 @@ onMounted(() => {
   formatDate,
   // randomColor,
    fetchJobs() {
-     axios.get('http://localhost:8010/api/jobs/')
+     axios.get('http://localhost:8010/api/jobs?limit=100')
        .then(response => {
          this.jobs = response.data;
          this.isLoading = false;
@@ -703,28 +693,6 @@ resetSearch() {
   padding-right: 10px;
 }
 
-.custom-datepicker {
-  --vdp-bg-color: #ffffff;
-  --vdp-text-color: #ff0000;
-  --vdp-box-shadow: 0 4px 10px 0 rgba(128, 144, 160, 0.1), 0 0 1px 0 rgba(128, 144, 160, 0.81);
-  --vdp-border-radius: 3px;
-  --vdp-heading-size: 2.5em;
-  --vdp-heading-weight: bold;
-  --vdp-heading-hover-color: #eeeeee;
-  --vdp-arrow-color: currentColor;
-  --vdp-elem-color: currentColor;
-  --vdp-disabled-color: #d5d9e0;
-  --vdp-hover-color: #ffffff;
-  --vdp-hover-bg-color: #af0b0b;
-  --vdp-selected-color: #ffffff;
-  --vdp-selected-bg-color: #af0b0b;
-  --vdp-current-date-outline-color: #888888;
-  --vdp-current-date-font-weight: bold;
-  --vdp-elem-font-size: 0.8em;
-  --vdp-elem-border-radius: 3px;
-  --vdp-divider-color: #d5d9e0;
-}
-
 .company-details {
   background-color: #f4f4f4;
   padding: 1rem;
@@ -794,11 +762,8 @@ resetSearch() {
   margin-top: 1rem;
   /* Add more styles as needed for better readability */
 }
+.v-data-table__tr:hover{
+  background-color: #fff4f4;
+  cursor: pointer;
+}
 </style>
-
-
-
-
-
-
-

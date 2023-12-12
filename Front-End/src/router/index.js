@@ -24,7 +24,7 @@ const routes = [
 
       },
       {
-        path: '/candidates/:companyName', // Dynamic route for company name
+        path: '/candidates/:companyName/:jobTitle', // Dynamic route for company name
         name: 'Candidates',
         component: () => import('@/views/candidatePage.vue'),
         meta: { requiresAuth: true }, // This route requires authentication

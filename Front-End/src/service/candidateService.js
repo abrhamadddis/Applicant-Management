@@ -1,7 +1,7 @@
 import { apiClient } from './service';
  
 const getCandidates = (params = '') => {
-  return apiClient.get(`/candidates${params}`);
+  return apiClient.get(`/candidates?limit=100${params}`);
 };
  
 const getCandidateById = (id) => {
