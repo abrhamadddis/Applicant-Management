@@ -14,6 +14,7 @@ const createCandidate = asyncHandler(async (req, res) => {
     reason,
     overall_feedback,
     foreign_name,
+    job_title,
     position,
     current_client,
   } = req.body;
@@ -43,6 +44,7 @@ const createCandidate = asyncHandler(async (req, res) => {
       reason,
       overall_feedback,
       foreign_name,
+      job_title,
       position,
       current_client,
     });
@@ -128,6 +130,7 @@ const getCandidate = asyncHandler(async (req, res) => {
       overall_feedback,
       foreign_name,
       position,
+      job_title,
       company,
     } = candidate;
 
@@ -144,6 +147,7 @@ const getCandidate = asyncHandler(async (req, res) => {
       CV,
       overall_feedback,
       foreign_name,
+      job_title,
       position,
       company,
     });

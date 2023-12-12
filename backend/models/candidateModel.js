@@ -19,6 +19,7 @@ const candidateSchema = mongoose.Schema({
   foreign_name: { type: String },
   position: { type: String },
   company:  { type: String },
+  job_title: { type: String },
   created_by: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   updated_by: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 }, {
