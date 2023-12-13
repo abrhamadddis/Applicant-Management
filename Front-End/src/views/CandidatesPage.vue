@@ -1,84 +1,175 @@
 <template>
-    <div class="bg-lightGrey px-10  py-5">
-        <v-container fluid>
-          <v-row justify="center">
-            <v-col cols="12" class="text-center">
-              <v-toolbar-title>Candidates for {{ $route.params.companyName }}</v-toolbar-title>
-            </v-col>
-          </v-row>
-        </v-container>
-      <v-data-table 
-      class="my-5 mx-auto bg-white shadow-lg rounded-lg"
-        :headers="headers"
-        :items="filteredCandidates"
-        :sort-by="[{ key: 'first_name', order: 'asc' }]"
-        v-if="!loading && filteredCandidates.length"
-      >
-        <template v-slot:top>
-        <div>
-            <v-toolbar flat class="bg-grey-lighten-4 bg-shades-black rounded-lg">
-            <v-divider class="" inset vertical></v-divider>
-            <v-text-field
-            v-model="search"
-            prepend-icon="mdi-magnify"
-            label="Search"
-            variant="underlined"
-            single-line
-            hide-details
-            ></v-text-field>
-            <v-spacer></v-spacer>
+  <div class="bg-lightGrey px-10  py-5">
+      <v-container fluid>
+        <v-row justify="center">
+          <v-col cols="12" class="text-center">
+            <v-toolbar-title v-if="$route.params.companyName">Candidates for {{ $route.params.companyName }}</v-toolbar-title>
+        <v-toolbar-title v-else>Candidates</v-toolbar-title>
+          </v-col>
+        </v-row>
+      </v-container>
+    <v-data-table 
+    class="my-5 mx-auto bg-white shadow-lg rounded-lg"
+      :headers="headers"
+      :items="filteredCandidates"
+      :sort-by="[{ key: 'first_name', order: 'asc' }]"
+      v-if="!loading && filteredCandidates.length"
+    >
+      <template v-slot:top>
+      <div>
+          <v-toolbar flat class="bg-grey-lighten-4 bg-shades-black rounded-lg">
+          <v-divider class="mx-4" inset vertical></v-divider>
+          <v-text-field
+          v-model="search"
+          prepend-icon="mdi-magnify"
+          label="Search"
+          variant="underlined"
+          single-line
+          hide-details
+          ></v-text-field>
+          <v-spacer></v-spacer>
 
-            <v-dialog v-model="dialog" max-width="500px">
-              <template v-slot:activator="{ props }">
-                <v-btn color="white" dark class=" my-5 mb-2" v-bind="props">
-                    <v-icon left class="bg-white rounded-lg"> mdi-plus</v-icon> Add Candidate
-                </v-btn> 
-              </template>
+          <v-dialog v-model="dialog" max-width="1000px">
+            <template v-slot:activator="{ props }">
+              <v-btn color="white" dark class=" my-5 mb-2" v-bind="props">
+                  <v-icon left class="bg-white rounded-lg"> mdi-plus</v-icon> Add Candidate
+              </v-btn> 
+            </template>
 
-              <!-- Add candidate dialog goes here -->
-              <!-- Add candidate dialog -->
-                <v-dialog v-model="dialog" max-width="1000px">
-                <v-card>
-                <v-card-title>
-                    <span class="headline">{{ formTitle }}</span>
-                </v-card-title>
-                <v-card-text>
-                    <v-container>
-                    <v-row>
-                        <v-col cols="12" sm="6" md="4">
-                        <v-text-field v-model="editedItem.first_name" label="First Name"></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                        <v-text-field v-model="editedItem.last_name" label="Last Name"></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                        <v-text-field v-model="editedItem.email" label="Email"></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                        <v-text-field v-model="editedItem.phone_number" label="Phone Number"></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                        <v-text-field v-model="editedItem.location" label="Location"></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                        <v-text-field v-model="editedItem.status" label="Status"></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                        <v-text-field v-model="editedItem.company" label="Company"></v-text-field>
-                        </v-col>
-                    </v-row>
-                    </v-container>
-                </v-card-text>
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                    <v-btn color="blue darken-1" text @click="save">Save</v-btn>
-                </v-card-actions>
-                </v-card>
-                </v-dialog>
+            <!-- Add candidate dialog goes here -->
+            <!-- Add candidate dialog -->
+              <v-dialog v-model="dialog" max-width="1000px">
+              <v-card>
+              <v-card-title>
+              <span class="text-h5">{{ formTitle }}</span>
+            </v-card-title>
 
-            </v-dialog>
-            <v-dialog v-model="infoDialog" max-width="1100px" >
+            <v-card-text>
+              <v-container>
+                <v-row>
+                  <v-col cols="12" sm="6" md="4">
+                    <!-- <v-text-field
+                      v-model="editedItem.first_name"
+                      label="First Name"
+                    ></v-text-field> -->
+              
+    <v-text-field
+      v-model="first_name.value.value"
+      :counter="10"
+      :error-messages="first_name.errorMessage.value"
+      label="Name"
+    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field
+                      v-model="editedItem.last_name"
+                      label="Last Name"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field
+                      v-model="email.value.value"
+                      :error-messages="email.errorMessage.value"
+                      
+                      label="Email"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <!-- <v-text-field
+                      v-model="editedItem.phone_number"
+                      label="Phone Number"
+                    ></v-text-field> -->
+                    <v-text-field
+      v-model="phone_number.value.value"
+      :counter="10"
+      :error-messages="phone_number.errorMessage.value"
+      label="Phone Number"
+    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field
+                      v-model="editedItem.position"
+                      label="Position"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                   <v-select
+                   v-model=editedItem.company
+                    :items="filteredCompanies"
+                   label = "Current Client"
+                   ></v-select>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-select
+                      v-model="editedItem.job_title"
+                      :items="jobTitles"
+                      label="Job Title"
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field
+                      v-model="editedItem.foreign_name"
+                      label="Foreign Name"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field
+                      v-model="editedItem.location"
+                      label="Location"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field
+                      v-model="editedItem.cv"
+                      label="Upload Cv"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                   <v-select
+                   v-model=editedItem.source
+                    :items=sources
+                   label = "Sources"
+                   ></v-select>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                   <v-select
+                   v-model=editedItem.status
+                    :items=statuses
+                   label = "status"
+                   ></v-select>
+                  </v-col>
+                  <v-col cols="12" sm="12" md="12">
+                    <v-textarea
+                      v-model="editedItem.overall_feedback"
+                      label="Over All Feedback"
+                    ></v-textarea>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card-text>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <!-- <v-btn
+      class="me-4"
+      @click="v$.$validate"    >
+      Submit
+    </v-btn> -->
+    <!-- <v-btn @click="clearForm">
+      Clear
+    </v-btn> -->
+              <v-btn color="blue-darken-1" variant="text" @click="close">
+                Cancel
+              </v-btn>
+              <v-btn color="blue-darken-1" variant="text" @click="save">
+                Save
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        </v-dialog>
+          <!-- user information  -->
+        <v-dialog v-model="infoDialog" max-width="1100px" >
           <template v-slot:activator="{ props }">
           </template>
           <v-card class="px-8 py-8">
@@ -93,13 +184,14 @@
                         <v-col>
                       <p>First Name: {{ clickedItem.first_name }}</p>
                       <p>Last Name: {{ clickedItem.last_name }}</p>
-                      <p>Foreign Name: {{ clickedItem.foreignName }}</p>
+                      <p>Foreign Name: {{ clickedItem.foreign_name }}</p>
                     </v-col>
                 </v-row>
               </v-col>
 
               <v-col>
                   <p> Applied For: {{ clickedItem.position }}</p>
+                  <p> Job Title: {{ clickedItem.job_title }}</p>
                   <p>Desired salary: 500</p>
                   <p>Current Client: {{ clickedItem.company }}</p>
               </v-col>
@@ -120,13 +212,13 @@
              </v-row>
              <v-row>
                 <v-col>
-                  <!-- <v-chip :color="getStatusColor(clickedItem.status)" dark> -->
+                  <v-chip :color="getStatusColor(clickedItem.status)" dark>
                     
                       <v-card-title class="px-4 ">
                         <h3 class="pb-10 h-12 pt-10">{{ clickedItem.status }}</h3>  
                       </v-card-title>
                     
-                  <!-- </v-chip> -->
+                  </v-chip>
                   <!-- <v-card   class="pb-8 pt-2 px-2">
                     <p>Status</p>
                     <v-chip :color="getStatusColor(clickedItem.status)" dark>{{ clickedItem.status }}</v-chip>
@@ -140,7 +232,7 @@
                 </v-col>
                 <v-col cols="9">
                   <v-card >
-                    <p class="px-2 py-2">Overall Feedback: {{ clickedItem.overAllFeedBack }}</p>
+                    <p class="px-2 py-2">Overall Feedback: {{ clickedItem.overall_feedback }}</p>
                   </v-card>
               </v-col>
               </v-row>
@@ -153,197 +245,440 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-          </v-toolbar>
-        </div>
-        </template>
-        <template v-slot:item.actions="{ item }">
-          <v-icon size="small" class="px-2" color="black lighten-3" @click="showItemInfo(item)"> mdi-eye </v-icon>
-          <v-icon size="small" class="px-2" color="black lighten-3" @click="editItem(item)"> mdi-pencil </v-icon>
-          <v-icon size="small" class="px-2" color="black lighten-3" @click="deleteItem(item)"> mdi-delete </v-icon>
-        </template>
-        <template v-slot:no-data>
-          <v-btn color="primary" @click="initialize"> Reset </v-btn>
-        </template>
-      </v-data-table>
-      <div v-else-if="!loading">No candidates found for {{ $route.params.companyName }}</div>
+        <v-dialog v-model="dialogDelete" max-width="500px">
+          <v-card>
+            <v-card-title class="text-h5"
+              >Are you sure you want to delete this item?</v-card-title
+            >
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue-darken-1" variant="text" @click="closeDelete"
+                >Cancel</v-btn
+              >
+              <v-btn
+                color="blue-darken-1"
+                variant="text"
+                @click="deleteItemConfirm"
+                >OK</v-btn
+              >
+              <v-spacer></v-spacer>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-toolbar>
+      </div>
+    </template>
+    <template v-slot:item.status="{ item }">
+      <v-chip :color="getStatusColor(item.status)" dark>{{ item.status }}</v-chip>
+    </template>
+    <template v-slot:item.actions="{ item }">
+      <v-icon @click=showItemInfo(item)> mdi-eye </v-icon>
+      <v-icon @click="editItem(item)" size="small" class="me-2" >
+        mdi-pencil
+      </v-icon>
+      <v-icon size="small" @click="deleteItem(item)"> mdi-delete </v-icon>
+      
+    </template>
+    <template v-slot:no-data>
+      <v-btn color="primary" @click="initialize"> Reset </v-btn>
+    </template>
+  </v-data-table>
+  <div v-else-if="!loading">No candidates found for {{ $route.params.companyName }}
+    <v-btn color="primary" @click="resetSearch"> Reset </v-btn>
+
+  </div>
       <div v-else>Loading candidates...</div>
     </div>
-   </template>
-   
-   <script>
-  //  import candidateData from "../assets/tables/candidateTable";
-   import axios from "axios";
+</template>
+<script>
+import axios from 'axios'
+import { useField, useForm } from 'vee-validate'
 
-
-   export default {
-    data() {
-      return {
-        search: '',
-        candidates: [],
-        loading: true,
-            dialog: false,
+import {getCandidates, getCandidateById, createCandidate, updateCandidate} from '../service/candidateService'
+export default {
+  data: () => ({
+    search:'',
+    dialog: false,
+    editedItem: {},
     dialogDelete: false,
     infoDialog: false,
     clickedItem: null,
-        headers: [
-            {
-            title: "First Name",
-            align: "start",
-            sortable: true,
-            key: "first_name",
-            },
-          { title: "Last Name",text: 'Last Name', key: "last_name", value: 'last_name' },
-          { title: "Email",text: 'Email',  key: "email", value: 'email' },
-          { title: "Phone Number",text: 'Phone Number',  key: "phone_number",value: 'phone_number' },
-          { title: "Location",text: 'Location', key: "location", value: 'location' },
-          { title: "Status",text: 'Status',  key: "status", value: 'status' },
-          { title: "Company",text: 'Company',  key: "company", value: 'company' },
-          { title: "Action",text: 'Actions',  key: "actions", value: 'actions', sortable: false },
-        ],
-        dialog: false,
-        editedIndex: -1,
-        editedItem: {
-          first_name: "",
-          last_name: "",
-          email: "",
-          phone_number: "",
-          location: "",
-          status: "",
-          company: "",
-        },
-        defaultItem: {
-          first_name: "",
-          last_name: "",
-          email: "",
-          phone_number: "",
-          location: "",
-          status: "",
-          company: "",
-        },
-      };
-    },
-    computed: {
-  filteredCandidates() {
-    console.log('Search:', this.search);
-    console.log('Company Name:', this.$route.params.companyName);
+    jobTitles: [],
+    selectedJobTitle: null,
+    headers: [
+      {
+        title: "First Name",
+        align: "start",
+        sortable: false,
+        key: "first_name",
+      },
+      { title: "Last Name", key: "last_name" },
+      { title: "Email", key: "email" },
+      { title: "Phone Number", key: "phone_number" },
+      { title: "Company Name", key: "company" },
+      { title: "Location", key: "location" },
+      { title: "Status", key: "status" },
+      { title: "Job Title", key: "job_title" },
+      { title: "Actions", key: "actions", sortable: false },
+    ],
+    candidates: [],
+    editedIndex: -1,
+    editedItem: {
+      first_name: "",
+      last_name: "",
+      email: "",
+      phone_number: "",
+      position:"",
+      company:"",
+      foreign_name: "",
+      location: "",
+      cv:"",
+      source: "",
+      status: "",
+      overall_feedback: "",
 
+
+    },
+    defaultItem: {
+      first_name: "",
+      last_name: "",
+      email: "",
+      phone_number: "",
+      position:"",
+      company:"",
+      job_title: "",
+      foreign_name: "",
+      location: "",
+      cv:"",
+      source: "",
+      status: "",
+      overall_feedback: "",
+    },
+    statuses:[
+      "Pending",
+      "Interviewed",
+      "Offered",
+      "Rejected",
+      "Hired"
+    ],
+    sources:[
+      "Linkedin",
+      "Telegram Bot",
+      "Tiktok",
+      "Dereja",
+      "University"
+    ],
+    companys: [
+      "CCI",
+      "Vermasoft",
+      "IAG"
+    ]
+  }),
+  computed: {
+    formTitle() {
+      return this.editedIndex === -1 ? "New Candidate" : "Edit Candidate";
+    },
+    filteredCompanies() {
+      const companyName = this.$route.params.companyName;
+    if (companyName) {
+      return this.companys.filter(company => {
+        return company.toLowerCase() === companyName.toLowerCase();
+      });
+    } else {
+      return this.companys; // Return all companies when there's no company name in the route
+    }
+  },
+  filteredJobTitles() {
+      const jobTitleParam = this.$route.params.jobTitle;
+      console.log("the tyjobtitle from filteredJobTitles", jobTitleParam);
+      if (jobTitleParam) {
+        return this.jobTitles.filter(job => {
+          return job.toLowerCase() === jobTitleParam.toLowerCase();
+        });
+      } else {
+        return jobTitleParam; // Return all job titles when there's no jobTitleParam
+        // console.log("the cxvzsdgjobtitle from filteredJobTitles", jobTitles);
+      }
+    },
+  // filteredJobTitles() {
+  //     const jobTitle = this.$route.params.jobTitle;
+  //     console.log('the jobtitle from filteredJobTitles',jobTitle);
+  //   if (jobTitle) {
+  //     return this.jobTitle.filter(job_title => {
+  //       return job_title.company === selectedCompany;
+  //     });
+  //   } else {
+  //     return this.jobTitle; // Return all companies when there's no company name in the route
+  //   }
+  // },
+    
+    filteredCandidates() {
+    console.log('Search:', this.search);
+    console.log('Company Name:', this.$route.params.companyName );
+console.log('Job Title:', this.$route.params.jobTitle);
     if (!this.search && this.$route.params.companyName !== undefined && this.$route.params.companyName !== '') {
-      const filtered = this.candidates.filter(candidate => candidate.company === this.$route.params.companyName);
+      // this.$route.params.jobtitle
+      const filtered = this.candidates.filter(candidate => candidate.company === this.$route.params.companyName && candidate.job_title === this.$route.params.jobTitle);
       console.log('Filtered by Company:', filtered);
       return filtered;
     } else if (!this.search) {
       console.log('All Candidates:', this.candidates);
       return this.candidates; // Return all candidates when no search and no company filter is provided
     }
-
-    const query = this.search.toLowerCase();
-    const filteredBySearch = this.candidates.filter(candidate => {
-      // Filter based on search query
-      return (
-        candidate.first_name.toLowerCase().includes(query) ||
-        candidate.last_name.toLowerCase().includes(query) ||
-        candidate.email.toLowerCase().includes(query) ||
-        candidate.phone_number.toLowerCase().includes(query) ||
-        candidate.location.toLowerCase().includes(query) ||
-        candidate.status.toLowerCase().includes(query) ||
-        candidate.company.toLowerCase().includes(query)
-      );
-    });
-    console.log('Filtered by Search:', filteredBySearch);
-    return filteredBySearch;
-  },
-},
-
-
-   async created() {
-      // Replace this with the imported data
-      // this.candidates = candidateData;
-      // async created() {
-        const token = localStorage.getItem('token');
-
-if (!token) {
-  this.$router.push('/login');
-  return; // Exit early if there's no token
-}
-
-const config = {
-  headers: {
-    'Authorization': `Bearer ${token}`
+    if (!this.search) {
+    return this.candidates;
   }
-};
 
-try {
-  const response = await axios.get('http://localhost:8010/api/candidates/', config);
-  this.candidates = response.data;
-} catch (error) {
-  console.error(error);
-  this.showErrorToUser('Failed to fetch candidates. Please try again.'); // Show error to the user
-}
-      // Simulating a delay for data loading
-      setTimeout(() => {
-        this.loading = false;
-      }, 1000);
+  const query = this.search.toLowerCase();
+  const filteredBySearch = this.candidates.filter(candidate => {
+    return (
+      (candidate.first_name && candidate.first_name.toLowerCase().includes(query)) ||
+      (candidate.last_name && candidate.last_name.toLowerCase().includes(query)) ||
+      (candidate.email && candidate.email.toLowerCase().includes(query)) ||
+      (candidate.phone_number && typeof candidate.phone_number === 'string' && candidate.phone_number.toLowerCase().includes(query)) ||
+      (candidate.location && candidate.location.toLowerCase().includes(query)) ||
+      (candidate.status && candidate.status.toLowerCase().includes(query)) ||
+      (candidate.company && candidate.company.toLowerCase().includes(query))
+    );
+  });
+
+  return filteredBySearch;
+  },
+  },
+
+  watch: {
+    dialog(val) {
+      val || this.close();
     },
-    methods: {
-      editItem(item) {
-        this.editedIndex = this.candidates.indexOf(item);
-        this.editedItem = Object.assign({}, item);
-        this.dialog = true;
+    dialogDelete(val) {
+      val || this.closeDelete();
+    },
+  },
+
+
+  created() {
+    this.fetchCandidates();
+    console.log('job title ',this.$route.params.jobTitle);
+  },
+  mounted() {
+    this.fetchJobTitles();
+  },
+
+  methods: {
+    async fetchJobTitles() {
+      try {
+        const response = await axios.get('http://localhost:8010/api/jobs');
+        this.jobTitles = response.data.map(job => job.title);
+        console.log('Job Titles from fetchJobTitles method:', this.jobTitles);
+      } catch (error) {
+        console.error('Error fetching job titles:', error);
+      }
+    },
+    resetSearch() {
+      this.search = '';
+      console.log('Search:', this.search);
+    },
+    async fetchCandidates() {
+      try {
+        const response = await getCandidates()
+
+        this.candidates = response.data;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+    editItem(item) {
+      this.editedIndex = this.candidates.indexOf(item);
+      this.editedItem = item;
+      this.dialog = true
+    },
+    deleteItem (item) {
+        this.editedIndex = this.candidates.indexOf(item)
+        this.editedItem = Object.assign({}, item)
+       
+        this.dialogDelete = true
       },
-      showItemInfo(item) {
-  this.clickedItem = item;
-  this.infoDialog = true;
+
+async deleteItemConfirm() {
+  try {
+    const token = localStorage.getItem('token');
+    const apiUrl = `http://localhost:8010/api/candidates/${this.editedItem._id}`;
+
+    // Check if token exists in local storage
+    if (token) {
+      // Make the DELETE request with the token in the Authorization header
+      await axios.delete(apiUrl, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // Remove the deleted item from the local candidates array
+      this.candidates.splice(this.editedIndex, 1);
+      this.closeDelete();
+    } else {
+      // Handle the case where the token is missing or invalid
+      console.error('No token available.');
+      // You might want to handle this scenario, e.g., redirect to login or show an error message.
+    }
+  } catch (error) {
+    console.error('Error deleting item:', error);
+    // Handle error scenarios, show a message, etc.
+  }
 },
 
-      deleteItem(item) {
-        this.editedIndex = this.candidates.indexOf(item);
-        this.editedItem = Object.assign({}, item);
-        this.dialogDelete = true;
-      },
-      deleteItemConfirm() {
-        this.candidates.splice(this.editedIndex, 1);
-        this.closeDelete();
-      },
-      close() {
-        this.dialog = false;
-        this.$nextTick(() => {
-          this.editedItem = Object.assign({}, this.defaultItem);
-          this.editedIndex = -1;
-        });
-      },
-      closeDelete() {
-        this.dialogDelete = false;
-        this.$nextTick(() => {
-          this.editedItem = Object.assign({}, this.defaultItem);
-          this.editedIndex = -1;
-        });
-      },
-
-      save() {
-    // Populate the company field with the route parameter value
-    this.editedItem.company = this.$route.params.companyName;
-
-    if (this.editedIndex > -1) {
-      Object.assign(this.candidates[this.editedIndex], this.editedItem);
-    } else {
-      this.candidates.push(this.editedItem);
-    }
-    this.close();
-  },
+    close() {
+      this.dialog = false;
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      });
     },
+
+    closeDelete() {
+      this.dialogDelete = false;
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      });
+    },
+
+    async save() {
+      const token = localStorage.getItem('token');
+
+const base64Url = token.split('.')[1]; // Extract the payload part of the token
+const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/'); // Fix characters
+const decodedToken = JSON.parse(atob(base64)); // Decode the base64 encoded string
+const userIdFromToken = decodedToken.user_id;
+
+  // Update the editedItem object
+  this.editedItem.user_id = userIdFromToken;
+  this.editedItem.created_by = userIdFromToken;
+  this.editedItem.updated_by = userIdFromToken;
+
+      if (this.editedIndex > -1) {
+        Object.assign(this.candidates[this.editedIndex], this.editedItem);
+        try{
+          const apiEndpoint = await updateCandidate(this.editedItem._id, this.editedItem);
+          console.log("from candidate page",apiEndpoint)
+          Object.assign(this.candidates[this.editedIndex], apiEndpoint);
+          console.log(this.editedItem)
+        }catch(error){
+          console.error(error);
+        }
+      } else {
+
+        this.editedItem.company = this.$route.params.companyName;
+
+
+        this.candidates.push(this.editedItem);
+        try{
+          const newCandidate = await createCandidate(this.editedItem);
+          console.log(newCandidate)
+        }catch(error){
+          console.error(error);
+        }
+      }
+      this.close();
+    },
+    getStatusColor(status) {
+      switch (status) {
+        case 'Pending':
+          return 'blue';
+        case 'Interviewed':
+          return 'orange';
+        case 'Offered':
+          return 'green';
+        case 'Rejected':
+          return 'red';
+        default:
+          return 'grey';
+      }
+    },
+    showItemInfo(item) {
+     this.clickedItem = item;
+     this.infoDialog = true;
+   }
+
+  },
+  
+ setup() {
+   const { handleSubmit, handleReset } = useForm({
+     validationSchema: {
+       first_name (value) {
+         if (value?.length >= 2) return true
+
+         return 'Name needs to be at least 2 characters.'
+       },
+       phone_number (value) {
+         if (value?.length > 9 && /[0-9-]+/.test(value)) return true
+
+         return 'Phone number needs to be at least 9 digits.'
+       },
+       email (value) {
+         if (/^[a-z.-]+@[a-z.-]+\.[a-z]+$/i.test(value)) return true
+
+         return 'Must be a valid e-mail.'
+       },
+     },
+   })
+   const first_name = useField('first_name')
+   const phone_number = useField('phone_number')
+   const email = useField('email')
+
+   const submit = handleSubmit(async values => {
+     try {
+       // Call your save function
+       await save(values);
+
+       // If the request was successful, do something...
+       alert('Form data saved successfully!');
+     } catch (error) {
+       // If there was an error, do something...
+       console.error('Error saving form data:', error);
+     }
+   });
+
+   return {
+     submit,
+     first_name,
+     phone_number,
+     email,
    };
-   </script>
-   
+ },
+};
+</script>
 
+<!-- 
+<script setup>
+  import { useField, useForm } from 'vee-validate'
 
+  const { handleSubmit, handleReset } = useForm({
+    validationSchema: {
+      first_name (value) {
+        if (value?.length >= 2) return true
 
+        return 'Name needs to be at least 2 characters.'
+      },
+      phone_number (value) {
+        if (value?.length > 9 && /[0-9-]+/.test(value)) return true
 
+        return 'Phone number needs to be at least 9 digits.'
+      },
+      email (value) {
+        if (/^[a-z.-]+@[a-z.-]+\.[a-z]+$/i.test(value)) return true
 
+        return 'Must be a valid e-mail.'
+      },
 
+    },
+  })
+  const first_name = useField('first_name')
+  const phone_number = useField('phone_number')
+  const email = useField('email')
 
-
-
-
-
-
-   
+  const submit = handleSubmit(values => {
+    alert(JSON.stringify(values, null, 2))
+  })
+</script> -->

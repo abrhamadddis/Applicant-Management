@@ -2,6 +2,7 @@
 import statusBoard from '@/views/pages/statusBoard.vue'
 import CardStatisticsVertical from '../@core/components/cards/CardStatisticsVertical.vue'
 import CalendarGraph from '@/views/pages/calendarGraph.vue'
+import Calender from '../assets/calend.png'
 import CalendarView from '@/views/pages/calendarView.vue'
 // 👉 Images
 import jobsicon from '../assets/jobs.png'
@@ -25,7 +26,17 @@ const goToJobPage = () => {
 const goToCandidatePage = () => {
   router.push('/candidates');
 };
-
+// const goToCandidatePages = async () => {
+//   try {
+//     await this.fetchOfferedCandidates();
+//     router.push({ 
+//       path: '/candidates',
+//       query: { status: 'offered' } // Filtering candidates with status 'offered'
+//     });
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
 </script>
 <script>
 
@@ -41,6 +52,13 @@ export default {
 
  
   methods: {
+    viewOfferedCandidates() {
+      // Redirect to the Candidates page with a query parameter for 'offered' status
+      this.$router.push({ 
+        path: '/candidates',
+        query: { status: 'Offered' } // Filtering candidates with status 'offered'
+      });
+    },
     async fetchJobs() {
       try {
         const authStore = useAuthStore(); // Get access to the auth store
@@ -181,53 +199,39 @@ export default {
       </div>
       </div>
   </VCol>
-  </VRow>
-
-  <VRow>
-
-  <div class="pa-6 pb-0 text-lg-h5 "> Statistic</div>
-  <VCol
+  
+<VCol
 
 cols="12"
 md="12"
 >
 <statusBoard />
 </VCol>
-</VRow>
-</VCol>
 
-  <VCol
-    cols="3"
-    sm="3">
-    <div class="px-6 py-2">
-      <div class="font-bold text-l mb-2 text-gray-800 text-center">Latest Candidates
-      <button @click.prevent="goToCandidatePage" class="text-primary  p-2 transition duration-300 transform hover:scale-110 ">
-        view all
-      </button>
-      </div>
-      </div>
-      <candidatesDashboard/>
-  </VCol>
-  <VCol
-    cols="12"
-    sm="12">
-    <div class="px-6 py-2">
-      <div class="font-bold text-l mb-2 text-gray-800 text-center">Latest Candidates
-      <button @click.prevent="goToCandidatePage" class="text-primary  p-2 transition duration-300 transform hover:scale-110 ">
-        view all
-      </button>
-      </div>
-      </div>
-      <CalendarView ref="calendar" />
-  </VCol>
+  </VRow>
+
+ 
+
+</VCol>
+<VCol
+     cols="8"
+     md="4"
+  >
+<div class="pa-6 pb-0 text-lg-h5 "> 
+<img src='../assets/calend.png'>  
+</div>
+</VCol>
+  
+ 
  </VRow>
   
     <VCol
       cols="12"
       sm="12" class="mt-11"
     >
-   
-      <VRow>
+    <VRow>
+
+
         <VCol
           cols="6"
           md="3"
@@ -238,6 +242,8 @@ md="12"
               image: jobsicon,
               stats: jobs.length,
             }"
+                  @click="goToJobPage "
+
           />
         </VCol>
         
@@ -248,10 +254,13 @@ md="12"
         >
           <CardStatisticsVertical
             v-bind="{
-              title: 'Achieved / Applied candidates',
+              title: 'Accepted candidates',
               image: appliedCandidates,
               stats: candidates.filter(candidate => candidate.status === Offered).length,
+
             }"
+            @click="viewOfferedCandidates"
+
           />
         </VCol>
 
@@ -269,17 +278,18 @@ md="12"
           />
         </VCol>
         <VCol
-          cols="6"
-          md="3"
-        >
-          <CardStatisticsVertical
-            v-bind="{
-              title: 'Out Dated Jobs',
-              image: outdatedJobs,
-              stats: jobs.filter(job => job.is_active === false).length,
-            }"
-          />
-        </VCol> 
+    cols="3"
+    sm="3">
+    <div class="px-6 py-2">
+      <div class="font-bold text-l mb-2 text-gray-800 text-center">Latest Candidates
+      <button @click.prevent="goToCandidatePage" class="text-primary  p-2 transition duration-300 transform hover:scale-110 ">
+        view all
+      </button>
+      </div>
+      </div>
+      <candidatesDashboard/>
+  </VCol>
+       
         
    
         <VRow>
@@ -323,6 +333,7 @@ md="12"
     </VCol>
   </VRow>
 </template>
+
 
 <style>
 

@@ -17,7 +17,7 @@
     >
       <template v-slot:top>
       <div>
-          <v-toolbar flat class="bg-grey-lighten-4 bg-shades-black rounded-lg">
+          <v-toolbar flat class="bg-primary rounded-lg">
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-text-field
           v-model="search"
@@ -52,6 +52,7 @@
                       v-model="editedItem.first_name"
                       label="First Name"
                     ></v-text-field>
+                    
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field
@@ -81,7 +82,7 @@
                    <v-select
                    v-model=editedItem.company
                     :items="filteredCompanies"
-                   label = "Current Client"
+                   label = "Company"
                    ></v-select>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
@@ -103,12 +104,16 @@
                       label="Location"
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
+                  <!-- <v-col cols="12" sm="6" md="4">
                     <v-text-field
                       v-model="editedItem.cv"
                       label="Upload Cv"
                     ></v-text-field>
-                  </v-col>
+                  </v-col> -->
+                  <v-col cols="12" sm="6" md="4">
+  <input type="file" @change="onFileChange" accept=".pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+</v-col>
+
                   <v-col cols="12" sm="6" md="4">
                    <v-select
                    v-model=editedItem.source
@@ -170,7 +175,7 @@
                   <p> Applied For: {{ clickedItem.position }}</p>
                   <p> Job Title: {{ clickedItem.job_title }}</p>
                   <p>Desired salary: 500</p>
-                  <p>Current Client: {{ clickedItem.company }}</p>
+                  <p>Company: {{ clickedItem.company }}</p>
               </v-col>
               <v-col>
                   <v-row>
@@ -280,6 +285,8 @@ export default {
     clickedItem: null,
     jobTitles: [],
     selectedJobTitle: null,
+    selectedFile: null,
+
     headers: [
       {
         title: "First Name",
@@ -432,14 +439,43 @@ console.log('Job Title:', this.$route.params.jobTitle);
 
 
   created() {
-    this.fetchCandidates();
-    console.log('job title ',this.$route.params.jobTitle);
+    // this.fetchCandidates();
+    // console.log('job title ',this.$route.params.jobTitle);
+    const statusFilter = this.$route.query.status;
+    console.log("ststus filtered", statusFilter);
+  if (statusFilter === 'Offered') {
+    this.fetchOfferedCandidates(); // Call method to fetch 'offered' candidates
+  } else {
+    this.fetchCandidates(); // Fetch all candidates or handle other status cases
+  }
   },
   mounted() {
     this.fetchJobTitles();
   },
 
   methods: {
+    
+  onFileChange(event) {
+    const file = event.target.files[0];
+    this.selectedFile = file;
+  },
+    async fetchOfferedCandidates() {
+    try {
+      const token = localStorage.getItem('token');
+      const apiUrl = `http://localhost:8010/api/candidates?status=Offered`;
+      if (token) {
+      const response= await axios.get(apiUrl, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }
+        })
+        this.candidates = response.data;
+        console.log("Offered candidates", this.candidates);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  },
     async fetchJobTitles() {
       try {
         const response = await axios.get('http://localhost:8010/api/jobs');
@@ -527,10 +563,18 @@ const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/'); // Fix character
 const decodedToken = JSON.parse(atob(base64)); // Decode the base64 encoded string
 const userIdFromToken = decodedToken.user_id;
 
+const formData = new FormData();
+  formData.append('cv', this.selectedFile);
+
+  // Add other candidate data to the form if needed
+  formData.append('first_name', this.editedItem.first_name);
+  formData.append('last_name', this.editedItem.last_name);
+
   // Update the editedItem object
   this.editedItem.user_id = userIdFromToken;
   this.editedItem.created_by = userIdFromToken;
   this.editedItem.updated_by = userIdFromToken;
+
 
       if (this.editedIndex > -1) {
         Object.assign(this.candidates[this.editedIndex], this.editedItem);
@@ -539,6 +583,8 @@ const userIdFromToken = decodedToken.user_id;
           console.log("from candidate page",apiEndpoint)
           Object.assign(this.candidates[this.editedIndex], apiEndpoint);
           console.log(this.editedItem)
+          // this.selectedFile = null;
+
         }catch(error){
           console.error(error);
         }

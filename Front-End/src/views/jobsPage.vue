@@ -12,7 +12,7 @@
    >
      <template v-slot:top>
        <!-- <v-toolbar flat> -->
-        <v-toolbar flat class="bg-grey-lighten-4 bg-shades-black rounded-lg">
+        <v-toolbar flat class="bg-primary rounded-lg">
         <!-- <v-toolbar flat class="bg-grey-lighten-4 rounded-lg"> -->
          <v-toolbar-title>Jobs</v-toolbar-title>
          <v-divider class="mx-4" inset vertical></v-divider>
@@ -178,19 +178,27 @@
          </v-dialog>
          <v-dialog v-model="dialogDelete" max-width="500px">
     <v-card class="delete-confirmation-modal">
-      <v-card-title class="text-h5">
-        Are you sure you want to delete this item?
+      <v-toolbar dense flat class="font-weight-bold text-lg px-5" color="primary lighten-2">
+        <v-icon class=" ml-2 mr-3" icon="mdi-alert"></v-icon>
+        Vuetify Confirm 
+
+        <v-spacer></v-spacer>
+        <v-btn icon @click="closeDelete">
+          <v-icon style="color: orange; background-color: white; padding: 18px; border-radius: 50%;">mdi-close</v-icon>
+</v-btn>
+     </v-toolbar>
+      <v-card-title class="mt-10 text-h5">
+        Are you sure you want to delete this Job?
       </v-card-title>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="primary" text @click="closeDelete">
-          Cancel
-        </v-btn>
-        <v-btn color="error" text @click="deleteItemConfirm">
-          OK
+     
+        <v-btn class="bg-grey" dark text @click="deleteItemConfirm"><v-icon icon="mdi-delete-outline"></v-icon> 
+          DELETE THIS!
         </v-btn>
         <v-spacer></v-spacer>
       </v-card-actions>
+      <div class="mt-5"></div>
     </v-card>
   </v-dialog>
   <v-dialog v-model="infoDialog" max-width="1000px">
@@ -199,7 +207,7 @@
     </template>
 
     <v-card class="job-profile-card ">
-      <v-card-title class="d-flex bg-grey-lighten-3 justify-space-between align-center">
+      <v-card-title class="pb-0 pa-0 d-flex bg-grey-lighten-3 justify-space-between align-center">
         <v-img
           height="200"
           src="https://talent.mmcytech.com/wp-content/uploads/2021/09/MMCY-Tech-Job_section-1.png"
@@ -211,7 +219,7 @@
             theme="dark"
           >
             <template v-slot:prepend>
-              <v-btn icon="$menu"></v-btn>
+              <!-- <v-btn icon="$menu"></v-btn> -->
             </template>
 
             <v-toolbar-title class="text-h6">
@@ -222,7 +230,7 @@
               <v-btn icon @click="infoDialog = false">
                 <v-icon>mdi-close</v-icon>
               </v-btn>
-              <v-btn icon="mdi-dots-vertical"></v-btn>
+              <!-- <v-btn icon="mdi-dots-vertical"></v-btn> -->
             </template>
           </v-toolbar>
         </v-img>
@@ -251,19 +259,19 @@
           <v-col cols="8">
             <v-card class="job-details">
               <v-card-text>
-                <span class="font-weight-bold text-primary text-lg text-center" style="font-size: 24px; font-family: 'Fancy Card Text', cursive;">
+                <span class="font-weight-bold text-primary text-lg text-center" style="font-size: 24px; ">
  {{ clickedItem.title }}
 </span>
 
                   <div></div>
-                  <span class="text-subtitle-1" style="font-family: 'Fancy Card Text', cursive;">
+                  <!-- <span class="text-subtitle-1" style="">
  Job Summary
-</span>
+</span> -->
 <p class="text-subtitle-1" style="font-family: 'Fancy Card Text', cursive;">
  {{ clickedItem.job_summary }}
 </p>
 
-                <span color="#FF694B">Responsibilities</span>
+                <span class="mt-4 mx-10" color="#FF694B">Responsibilities</span>
                 <p class="mx-10">{{ clickedItem.responsibilities }}</p>
 
                 <span color="#FF694B">Skills</span>
@@ -316,8 +324,29 @@
        <v-btn color="primary" @click="resetSearch"> Reset </v-btn>
      </template>
    </v-data-table>
+   <v-snackbar v-model="errorSnackbar" color="error">
+    {{ errorMessage }}
+    <!-- <v-btn class="bg-none"  @click="errorSnackbar = false">      <v-icon>mdi-close</v-icon>
+</v-btn> -->
+<v-btn icon dark @click="errorSnackbar = false" style="background: transparent; box-shadow: none;">
+
+<v-icon color="white">mdi-close</v-icon>
+    </v-btn>
+  </v-snackbar>
+
+  <!-- Snackbar for success -->
+  <v-snackbar v-model="successSnackbar" color="success">
+    Job added successfully!
+      <v-btn icon dark @click="successSnackbar = false" style="background: transparent; box-shadow: none;">
+        
+<v-icon color="white">mdi-close</v-icon>
+    </v-btn>
+
+  </v-snackbar>
   </div>
   <!-- </div> -->
+   <!-- Snackbar for errors -->
+
   </template>
  <script setup>
  import Datepicker from 'vue3-datepicker'
@@ -367,6 +396,10 @@ onMounted(() => {
     dialogDelete: false,
     infoDialog: false,
     clickedItem: null,
+    errorSnackbar: false,
+      successSnackbar: false,
+      errorMessage: '',
+
     headers: [
       //  { title: "User ID", key: "_id" },
        { title: "Title", key: "title" },
@@ -654,9 +687,12 @@ async save() {
 
       this.close();
       // Optionally trigger a component update or re-render here
+      this.successSnackbar = true;
 
     } catch (error) {
       console.error(error);
+      this.errorMessage = 'Error adding job. Please try again.';
+        this.errorSnackbar = true;
     }
   } else {
     console.error('Token not found');
@@ -687,6 +723,7 @@ resetSearch() {
 };
 </script>
 <style>
+
 .bg-lightGrey {
   background-color: #f5f5f5; /* Or any light grey color you prefer */
   padding-left: 10px;

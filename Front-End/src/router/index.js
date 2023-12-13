@@ -1,5 +1,6 @@
 // Composables
 import { createRouter, createWebHistory } from 'vue-router'
+import NotFound from '@/views/404.vue'; // Import the 404.vue component
 
 const routes = [
       {
@@ -58,6 +59,11 @@ const routes = [
         meta: { requiresAuth: true }, // This route requires authentication
 
       },
+      {
+        path: '/:catchAll(.*)', // Catch any unmatched route
+        name: 'NotFound',
+        component: NotFound, // Component to render for 404
+      },
 ]
 
 
@@ -65,7 +71,6 @@ const routes = [
 //   history: createWebHistory(process.env.BASE_URL),
 //   routes,
 // })
-
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
