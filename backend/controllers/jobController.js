@@ -186,7 +186,7 @@ cron.schedule('0 0 * * *', updateJobsStatus);
 
 const deleteJob = asyncHandler(async (req, res) => {
   try {
-    const job = await Job.findById(req.params.id);
+    let job = await Job.findById(req.params.id);
 
     if (!job) {
       res.status(400);
@@ -194,8 +194,9 @@ const deleteJob = asyncHandler(async (req, res) => {
     }
     // await Job.findByIdAndRemove(req.params.id);
 
-    job.is_archive = true;
-    res.status(200).json({id: req.params.id});
+    job = await Job.findByIdAndUpdate(req.params.id, {is_archive: true});
+    // job.is_archive = true;
+    res.status(200).json({id: req.params.id, job});
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
